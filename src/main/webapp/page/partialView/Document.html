@@ -1,0 +1,345 @@
+<div id ="documento_registro" class='col-lg-3 col-md-4 col-sm-6'>
+    <div class='row'>
+        <div class='col-8 kt-align-right'>
+            <a href="javascript:void(0);" onclick="@func" class='btn-icon kt-font-#color document'>
+                <i class='fa fa-clipboard-list' style='font-size: 100px;'></i>
+            </a>
+        </div>
+        <div class='offset-1 row' style="width: 100%;">
+            <h5 class='kt-font-io-n'> @nome </h5>
+        </div>
+    </div>
+</div>
+
+<div id ="documento_prg" class='col-lg-3 col-md-4 col-sm-6'>
+    <a target='_blank' href='@href' class='btn-icon kt-font-io document'>
+        <i class='fa fa-file-#ex' style='font-size: 100px;'></i>
+    </a>
+    <h5 class='kt-font-io-n'>@nome</h5>
+</div>
+
+<div id="doc_registro_individiale_mattina">
+    <div style="text-align: left; padding-top: 10px!important; padding-bottom: 10px!important;">
+        Giorno lezione
+    </div>
+    <input type="text" class="form-control" name="giorno" value="@date" autocomplete="off" readonly/>
+    <div style="text-align: left; padding-top: 10px!important; padding-bottom: 10px!important;">Docente</div>
+    <input type="text" class="form-control" name="docente" value="@docente" autocomplete="off" readonly/>
+    <div style="text-align: left; padding-top: 10px!important; padding-bottom: 10px!important;">
+        Orari lezione mattina
+    </div>
+    <div class="input-group">
+        <div class="col-lg-6" style="padding-left: 0px; "><input type="text" class="form-control" name="orario1_start" value="@start_mattina" autocomplete="off" readonly/></div>
+        <div class="col-lg-6" style="padding-right: 0px;"><input type="text" class="form-control" name="orario1_end" value="@end_mattina" autocomplete="off" readonly/></div>
+    </div>
+    <div class='kt-font-io' style="text-align: right; padding-top: 10px!important; padding-bottom: 10px!important;">Totale ore effettuate: <b>@tot_ore</b></div>
+</div>
+
+<div id="doc_registro_individiale_pomeriggio">
+    <div style="text-align: left; padding-top: 10px!important; padding-bottom: 10px!important;">
+        Giorno lezione
+    </div>
+    <input type="text" class="form-control" name="giorno" value="@date" autocomplete="off" readonly/>
+    <div style="text-align: left; padding-top: 10px!important; padding-bottom: 10px!important;">
+        Docente
+    </div>
+    <input type="text" class="form-control" name="docente" value="@docente" autocomplete="off" readonly/>
+    <div style="text-align: left; padding-top: 10px!important; padding-bottom: 10px!important;">
+        Orari lezione mattina
+    </div>
+    <div class="input-group">
+        <div class="col-lg-6" style="padding-left: 0px; ">
+            <input type="text" class="form-control" name="orario1_start" value="@start_mattina" autocomplete="off" readonly/>
+        </div>
+        <div class="col-lg-6" style="padding-right: 0px;">
+            <input type="text" class="form-control" name="orario1_end" value="@end_mattina" autocomplete="off" readonly/>
+        </div>
+    </div>
+    <div style="text-align: left; padding-top: 10px!important; padding-bottom: 10px!important;">Orari lezione pomeriggio</div>
+    <div class="input-group">
+        <div class="col-lg-6" style="padding-left: 0px;">
+            <input type="text" class="form-control" value="@start_pome" autocomplete="off" readonly />
+        </div>
+        <div class="col-lg-6" style="padding-right: 0px;">
+            <input type="text" class="form-control" value="@end_pome" autocomplete="off" readonly />
+        </div>
+    </div>
+    <div class='kt-font-io' style="text-align: right; padding-top: 10px!important; padding-bottom: 10px!important;">Totale ore effettuate: <b>@tot_ore</b></div>
+</div>
+
+<div id="doc_registro_individiale_ctrlore">
+    <div class='input-group'>
+        <div class='col-lg-6 kt-font-io' style="text-align: left; padding-left: 0px; padding-top: 10px!important; padding-bottom: 10px!important;">@msg</div><div class='col-lg-6' style='padding-left: 0px; padding-right: 0px;'><input type='time' class='form-control obbligatory' id='orericonosciute' name='orericonosciute' value='@hh' min='00:00' max='@max' /></div>
+    </div>
+</div>
+
+<div id="doc_registro_aula" class="form-group" style="width: 100%;">
+    <div style="text-align: left; padding-top: 10px!important; padding-bottom: 10px!important;">
+        Giorno e ora lezione
+    </div>
+    <div class="input-group row">
+        <div class="col-lg-4">
+            <input type="text" class="form-control" value="@date" readonly/>
+        </div>
+        <div class="col-lg-4">
+            <input type="text" class="form-control" value="@start" readonly/>
+        </div>
+        <div class="col-lg-4">
+            <input type="text" class="form-control" value="@end" readonly/>
+        </div>
+    </div>
+    <div class="input-group row" style="text-align: left; padding-top: 10px!important; padding-bottom: 10px!important;">
+        <div class="col-lg-4">
+            Ore effettuate<input type="text" class="form-control hour-make" value="@ore" readonly/>
+        </div>
+        <div class="col-lg-4">
+            Ore riconosciute<input type="time" class="form-control obbligatory hour-recognized" name="ore_conv" value="@ore_conv" @readonly/>
+        </div>
+    </div>
+    <div style="text-align: left; padding-top: 10px!important; padding-bottom: 10px!important;">
+        Docente
+    </div>
+    <input type="text" class="form-control" value="@docente" readonly/>
+    <div style="text-align: left; padding-top: 10px!important; padding-bottom: 10px!important;">
+        Presenti:
+    </div>
+    <div class='row'>
+        <div class='col-4'>
+        </div>
+        <div class='col-2'>
+            <label>Ingresso</label>
+        </div>
+        <div class='col-2'>
+            <label>Uscita</label>
+        </div>
+        <div class='col-2'>
+            <label>Ore</label>
+        </div>
+        <div class='col-2'>
+            <label>Ore riconosciute</label>
+        </div>
+    </div>
+    @presenti
+</div>
+
+<div id='div_presenza' class='row'>
+    <div class='col-4'>
+        <input class='form-control' value='@nome' readonly>
+    </div>
+    <div class='col-2'>
+        <input class='form-control' value='@in' readonly/>
+    </div>
+    <div class='col-2'>
+        <input class='form-control' value='@out' readonly/>
+    </div>
+    <div class='col-2'>
+        <input class='form-control hour-make' value='@ore' readonly/>
+    </div>
+    <div class='col-2'>
+        <input type="time" min="0" name="ore_riconsciute_@id" class='form-control hour-recognized obbligatory' value='@ore_riconosciute' @readonly/>
+    </div>
+</div>
+
+<div id="docSE">
+    <div class="custom-file">
+        <input type="file" tipo="obbligatory" class="custom-file-input" accept="@mime" name="doc" id="doc" onchange="return @func">
+        <label class="custom-file-label selected" id="label_file" style="text-align: left;">Seleziona File</label>
+    </div><br><br>
+    <div class="select-div" id="prestiti_div">
+        <select class="form-control kt-select2-general obbligatory" id="prestiti" name="prestiti"  style="width: 100%">
+            <option value="-">Seleziona piano di investimento</option>
+        </select></div><br>
+    <input class="form-control obbligatory" autocomplete="off" placeholder="Numero di Protocollo" value="@protocollo" name="protocollo" id="protocollo" maxlength="45" />
+</div>
+
+<div id="docM8">
+    <div class="custom-file">
+        <input type="file" tipo="obbligatory" class="custom-file-input" accept="@mime" name="doc" id="doc" onchange="return @func">
+        <label class="custom-file-label selected" id="label_file" style="text-align: left;">Seleziona File</label>
+    </div><br><br>
+    <input class="form-control obbligatory" placeholder="Idea di impresa" autocomplete="off" value="@idea" name="idea" id="idea" maxlength="90" />
+</div>
+
+<div id="uploadDoc">
+    <div class="custom-file">
+        <input type="file" tipo="obbligatory" class="custom-file-input" accept="@mime" name="file" id="file" onchange="return @func">
+        <label class="custom-file-label selected" id="label_doc" style="text-align: left;">Seleziona File</label>
+    </div>
+</div>
+
+<div id="swalDocId">
+    <div class="custom-file">
+        <input type="file" tipo="obbligatory" class="custom-file-input" accept="@mime" name="docid" id="docid" onchange="return @func">
+        <label class="custom-file-label selected" id="label_doc" style="text-align: left;">Seleziona File</label>
+    </div><br><br>
+    <input type="text" class="form-control obbligatory" name="scadenza" id="scadenza" placeholder="Data scadenza documento" autocomplete="off" readonly/>
+</div>
+
+<div id="swalDoc">
+    <div class="custom-file">
+        <input type="file" tipo="obbligatory" class="custom-file-input" accept="@mime" name="file" id="file" onchange="return @func">
+        <label class="custom-file-label selected" id="label_doc" style="text-align: left;">Seleziona File</label>
+    </div>
+</div>
+
+<div id="pecAnag">
+    <br>
+    <input type="hidden" id="prevpiva" name="prevpiva" value="@prevpiva">
+    <input type="hidden" id="prevcf" name="prevcf" value="@prevcf">
+    <div class="col-12 kt-align-left kt-font-io">Ragione Sociale</div>
+    <div class="col-12"><input class="form-control" placeholder="Ragione Sociale" autocomplete="off" value="@ragionesociale" name="ragionesociale_sa" id="ragionesociale_sa"  /></div><br>
+    <div id="warning_iva" class="form-group kt-font-danger row col" style="margin-left: 0px;margin-right: 0px; margin-bottom:0px; display: none;" ><div class="col-1"><i class="fa fa-exclamation-triangle" style="position: absolute;top: 50%;left: 50%;transform: translate(-50%,-50%);font-size:20px;" ></i></div><div class="col-10" >Patita IVA già presente.</div><div class="col-1"><i class="fa fa-exclamation-triangle" style="position: absolute;top: 50%;left: 50%;transform: translate(-50%,-50%);font-size:20px;"></i></div></div>
+    <div class="col-12 kt-align-left kt-font-io">Partita IVA</div>
+    <div class="col-12"><input class="form-control" placeholder="Partita IVA" autocomplete="off" value="@piva" name="piva_sa" id="piva_sa" onkeypress="return @numb" /></div><br>
+    <div id="warning_cf" class="form-group kt-font-danger row col" style="margin-left: 0px;margin-right: 0px; margin-bottom:0px; display: none;" ><div class="col-1"><i class="fa fa-exclamation-triangle" style="position: absolute;top: 50%;left: 50%;transform: translate(-50%,-50%);font-size:20px;" ></i></div><div class="col-10" >Codice fiscale già presente.</div><div class="col-1"><i class="fa fa-exclamation-triangle" style="position: absolute;top: 50%;left: 50%;transform: translate(-50%,-50%);font-size:20px;"></i></div></div>
+    <div class="col-12 kt-align-left kt-font-io">Codice Fiscale</div>
+    <div class="col-12"><input class="form-control" placeholder="Codice Fiscale" autocomplete="off" value="@cf" name="cf_sa" id="cf_sa" /></div><br>
+    <div class="col-12 kt-font-danger">Caricare la PEC (.pdf) relativa alla richiesta di modifica.</div><br>
+    <div class="col-12">
+        <div class="custom-file">
+            <input type="file" tipo="obbligatory" class="custom-file-input" accept="@mime" name="doc" id="doc" onchange="return @func">
+            <label class="custom-file-label selected" id="label_file" style="text-align: left;">Seleziona File</label>
+        </div>
+    </div><br>
+</div>
+
+<div id="swalReg">
+    <div id="warning_hh" class="form-group kt-font-danger row col" style="margin-left: 0px;margin-right: 0px; display: none;" >
+        <div class="col-1"><i class="fa fa-exclamation-triangle" style="position: absolute;top: 50%;left: 50%;transform: translate(-50%,-50%);font-size:20px;" ></i></div>
+        <div id="alertmsg" class="col-10" ></div>
+        <div class="col-1"><i class="fa fa-exclamation-triangle" style="position: absolute;top: 50%;left: 50%;transform: translate(-50%,-50%);font-size:20px;"></i></div>
+    </div>
+    <input type="text" class="form-control obbligatory" name="giorno" id="giorno" placeholder="Data lezione" readonly autocomplete="off"/><br>
+    <div id="warning_day" class="form-group kt-font-danger row col" style="margin-left: 0px;margin-right: 0px; display: none;" >
+        <div class="col-1"><i class="fa fa-exclamation-triangle" style="position: absolute;top: 50%;left: 50%;transform: translate(-50%,-50%);font-size:20px;" ></i></div>
+        <div id="alertmsg_day" class="col-10" ></div>
+        <div class="col-1"><i class="fa fa-exclamation-triangle" style="position: absolute;top: 50%;left: 50%;transform: translate(-50%,-50%);font-size:20px;"></i></div>
+    </div>
+    <div class="select-div" id="docente_div">
+        <select class="form-control kt-select2-general obbligatory" id="docente" name="docente"  style="width: 100%">
+            <option value="-">Seleziona Docente</option>
+        </select>
+    </div><br>
+    <div style="text-align: left; padding-top: 10px!important; padding-bottom: 10px!important;">Orari lezione mattina</div>
+    <div class="input-group" style ="position: relative; z-index: 100000;">
+        <div class="col-6" style="padding-left: 0px; ">
+            <input type="text" class="form-control time obbligatory" name="orario1_start" id="orario1_start" placeholder="Orario inizio" autocomplete="off" readonly/>
+        </div>
+        <div class="col-6" style="padding-right: 0px;">
+            <input type="text" class="form-control time obbligatory" name="orario1_end" id="orario1_end" placeholder="Orario fine" autocomplete="off" readonly/>
+        </div>
+    </div><br>
+    <div class="form-group kt-align-left row" style="margin-bottom: 0rem;">
+        <div class="col-9 kt-align-right">Orari lezione pomeriggio</div>
+        <div class="col-3 kt-align-right"><span class="kt-switch kt-switch--outline kt-switch--icon kt-switch--primary">
+                <label>
+                    <input type="checkbox" name="check" id="check" onchange="return checkpm();">
+                    <span></span>
+                </label>
+            </span>
+        </div></div>
+    <div class="input-group" style = "position: relative; z-index: 100000; display:none" id="div_pm">
+        <div class="col-6" style="padding-left: 0px;">
+            <input type="text" class="form-control time obbligatory" name="orario2_start" id="orario2_start" placeholder="Orario inizio" autocomplete="off" readonly disabled />
+        </div>
+        <div class="col-6" style="padding-right: 0px;">
+            <input type="text" class="form-control time obbligatory" name="orario2_end" id="orario2_end" placeholder="Orario fine" autocomplete="off" readonly disabled />
+        </div>
+    </div>
+    <div id="tot_hh" class="col row kt-font-io" style="text-align: left; padding-top: 20px!important;"></div>
+</div>
+
+
+<div id="swalModReg">
+    <div id="warning_hh" class="form-group kt-font-danger row col" style="margin-left: 0px;margin-right: 0px; display: none;" >
+        <div class="col-1"><i class="fa fa-exclamation-triangle" style="position: absolute;top: 50%;left: 50%;transform: translate(-50%,-50%);font-size:20px;" ></i></div>
+        <div id="alertmsg" class="col-10" ></div>
+        <div class="col-1"><i class="fa fa-exclamation-triangle" style="position: absolute;top: 50%;left: 50%;transform: translate(-50%,-50%);font-size:20px;"></i></div>
+    </div>
+    <input type="text" class="form-control obbligatory" name="giorno" id="giorno" placeholder="Data lezione" readonly autocomplete="off"/><br>
+    <div id="warning_day" class="form-group kt-font-danger row col" style="margin-left: 0px;margin-right: 0px; display: none;" >
+        <div class="col-1"><i class="fa fa-exclamation-triangle" style="position: absolute;top: 50%;left: 50%;transform: translate(-50%,-50%);font-size:20px;" ></i></div>
+        <div id="alertmsg_day" class="col-10" ></div>
+        <div class="col-1"><i class="fa fa-exclamation-triangle" style="position: absolute;top: 50%;left: 50%;transform: translate(-50%,-50%);font-size:20px;"></i></div>
+    </div>
+    <div class="select-div" id="docente_div">
+        <select class="form-control kt-select2-general obbligatory" id="docente" name="docente"  style="width: 100%">
+            <option value="-">Seleziona Docente</option>
+        </select>
+    </div><br>
+    <div style="text-align: left; padding-top: 10px!important; padding-bottom: 10px!important;">Orari lezione mattina</div>
+    <div class="input-group" style ="position: relative; z-index: 100000;">
+        <div class="col-6" style="padding-left: 0px; ">
+            <input type="text" class="form-control time obbligatory" name="orario1_start" id="orario1_start" placeholder="Orario inizio" autocomplete="off" readonly/>
+        </div>
+        <div class="col-6" style="padding-right: 0px;">
+            <input type="text" class="form-control time obbligatory" name="orario1_end" id="orario1_end" placeholder="Orario fine" autocomplete="off" readonly/>
+        </div>
+    </div><br>
+    <div class="form-group kt-align-left row" style="margin-bottom: 0rem;">
+        <div class="col-9 kt-align-right">Orari lezione pomeriggio</div>
+        <div class="col-3 kt-align-right"><span class="kt-switch kt-switch--outline kt-switch--icon kt-switch--primary">
+                <label>
+                    <input type="checkbox" name="check" id="check" onchange="return checkpm();">
+                    <span></span>
+                </label>
+            </span>
+        </div></div>
+    <div class="input-group" style = "position: relative; z-index: 100000; display:none" id="div_pm">
+        <div class="col-6" style="padding-left: 0px;">
+            <input type="text" class="form-control time obbligatory" name="orario2_start" id="orario2_start" placeholder="Orario inizio" autocomplete="off" readonly />
+        </div>
+        <div class="col-6" style="padding-right: 0px;">
+            <input type="text" class="form-control time obbligatory" name="orario2_end" id="orario2_end" placeholder="Orario fine" autocomplete="off" readonly />
+        </div>
+    </div>
+    <div id="tot_hh" class="col row kt-font-io" style="text-align: left; padding-top: 20px!important;"></div>
+</div>
+
+
+<div class="message sent" id="mittente">
+    @testo
+    <span class="metadata">
+        <span class="time">
+            @data
+        </span>
+    </span>
+</div>
+
+<div class="message received" id="destinatario">
+    @testo
+    <span class="metadata">
+        <span class="time">
+            @data
+        </span>
+    </span>
+</div>
+
+<div class="center col-11" id="whatsapp_micro">
+    <div class ="row">
+        <div class="col-12 kt-scroll" id="answers" style="padding-right: 20px;"><!--risposte-->
+        </div>
+    </div>
+    <!--send ask-->
+    <div class="row" id="send">
+        <div class="col-11">
+            <textarea class="form-control obbligatory" name="text" id="text" placeholder="Scrivi qui la risposta" style="height: calc(1.5em + 1.3rem + 2px)!important;"></textarea>
+        </div>
+        <div class="col-1">
+            <a onclick="@func;" href="javascript:void(0);" class="btn btn-io btn-icon btn-circle" style="margin:0!important;"><i class="fa fa-paper-plane"></i></a>
+        </div>
+    </div>
+</div>
+
+
+
+<div id="calendar_option">
+    <div class="row " id="send">
+        <div class="col-6 center">
+            <a class="btn btn-io fancyBoxDon" onclick="swal.close();" href="modifyFadConference.jsp?idFad=@id"><i class="fa fa-edit"></i> Modifica</a>
+        </div>
+        <div class="col-6 center">
+            <a class="btn btn-io-n fancyBoxDon" onclick="swal.close();" href="modifyFadConference.jsp?idFad=@id"><i class="fa fa-edit"></i> Modifica</a>
+        </div>
+    </div>
+</div>

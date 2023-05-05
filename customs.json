@@ -1,0 +1,11 @@
+{
+    "elements": {},
+    "attributes": {
+        "tipo": {
+            "context": "input"
+        },
+        "titolo": {
+            "context": "a"
+        }
+    }
+}

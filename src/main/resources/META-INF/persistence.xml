@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="microcredito" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>rc.soop.entity.User_monitoring</class>
+    <class>rc.soop.domain.Allievi_Pregresso</class>
+    <class>rc.soop.domain.Documenti_Allievi</class>
+    <class>rc.soop.domain.Selfiemployment_Prestiti</class>
+    <class>rc.soop.domain.ModificheStatoPrg</class>
+    <class>rc.soop.domain.StatoPartecipazione</class>
+    <class>rc.soop.domain.ProgettiFormativi</class>
+    <class>rc.soop.domain.Email</class>
+    <class>rc.soop.domain.Comuni</class>
+    <class>rc.soop.domain.CpiUser</class>
+    <class>rc.soop.domain.DocumentiPrg</class>
+    <class>rc.soop.domain.StatiPrg</class>
+    <class>rc.soop.domain.Tracking</class>
+    <class>rc.soop.domain.CPI</class>
+    <class>rc.soop.domain.Pagina</class>
+    <class>rc.soop.domain.Allievi</class>
+    <class>rc.soop.domain.SoggettiAttuatori</class>
+    <class>rc.soop.domain.Cad</class>
+    <class>rc.soop.domain.EstensioniFile</class>
+    <class>rc.soop.domain.Path</class>
+    <class>rc.soop.domain.Faq</class>
+    <class>rc.soop.domain.FasceDocenti</class>
+    <class>rc.soop.domain.Cloud</class>
+    <class>rc.soop.domain.TipoDoc</class>
+    <class>rc.soop.domain.Attivita</class>
+    <class>rc.soop.domain.Storico_ModificheInfo</class>
+    <class>rc.soop.domain.Docenti</class>
+    <class>rc.soop.domain.Storico_Prg</class>
+    <class>rc.soop.domain.ComuniCoord</class>
+    <class>rc.soop.domain.NomiProgetto</class>
+    <class>rc.soop.domain.TipoFaq</class>
+    <class>rc.soop.domain.TipoDoc_Allievi</class>
+    <class>rc.soop.domain.Estrazioni</class>
+    <class>rc.soop.domain.User</class>
+    <class>rc.soop.domain.TitoliStudio</class>
+    <class>rc.soop.domain.Condizione_Mercato</class>
+    <class>rc.soop.domain.Condizione_Lavorativa</class>
+    <class>rc.soop.domain.SediFormazione</class>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <properties>
+      <property name="eclipselink.logging.level" value="SEVERE"/>
+      <!--cache-->
+      <property name="eclipselink.query-results-cache" value="false"/>
+      <property name="eclipselink.cache.shared.default" value="false"/>
+      <property name="eclipselink.cache.size.default" value="0"/>
+      <property name="eclipselink.cache.type.default" value="None"/>
+      <property name="javax.persistence.schema-generation.database.action" value="create-or-extend-tables"/>
+      <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect"/>
+      <property name="javax.persistence.jdbc.user" value="bando"/>
+      <property name="javax.persistence.jdbc.password" value="bando"/>
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://172.27.2.66:3306/gest_donne?useSSL=false"/>
+    </properties>
+  </persistence-unit>
+</persistence>
