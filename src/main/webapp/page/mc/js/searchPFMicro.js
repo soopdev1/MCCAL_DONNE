@@ -500,7 +500,9 @@ function showRegistro(idregistro, controllare) {
     var doc_registro = "";
     var totalhh = calculateHoursRegistro(registro.orariostart_mattina, registro.orarioend_mattina, registro.orariostart_pom, registro.orarioend_pom).replace(":0", ":00");
     totalhh = totalhh.indexOf(":") === 1 ? "0" + totalhh : totalhh;
-
+    if (totalhh.endsWith(':0')) {
+        totalhh += "0";
+    }
     if (registro.orariostart_pom !== null) {
         doc_registro += getHtml("doc_registro_individiale_pomeriggio", context);
         doc_registro = doc_registro.replace("@start_pome", formattedTime(registro.orariostart_pom).replace(":0", ":00"))

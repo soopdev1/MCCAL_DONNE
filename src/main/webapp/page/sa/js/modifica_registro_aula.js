@@ -5,10 +5,10 @@
  */
 var context = document.getElementById("restristro_aula").getAttribute("data-context");
 
-var offset = moment().utcOffset()*60*1000;
+var offset = moment().utcOffset() * 60 * 1000;
 
-if(new Date().getHours() - new Date().getUTCHours()==2){//tolgo 1 ora per compensare ora legale
-    offset=offset-(60*1000);
+if (new Date().getHours() - new Date().getUTCHours() === 2) {//tolgo 1 ora per compensare ora legale
+    offset = offset - (60 * 1000);
 }
 
 
@@ -35,8 +35,8 @@ if (millis_my_end === 0 && millis_my_start === 0) {
     my_start = start;
     my_end = end;
 } else {
-    my_start = new Date(millis_day + millis_my_start+offset);
-    my_end = new Date(millis_day + millis_my_end+offset);
+    my_start = new Date(millis_day + millis_my_start + offset);
+    my_end = new Date(millis_day + millis_my_end + offset);
 }
 
 var min_time = "", max_time = "";//sono l'ora inizio e fine della darate della lezione. serve per fare i controlli sul singolo ragazzo.
@@ -81,7 +81,7 @@ function cssDatePicker() {
 
 $('#range2').change(function (e) {
     var date = $(e.target).val();
-    if (date != "") {
+    if (date !== "") {
         $('input.time-a.in').val(min_time);
         $('input.time-a.out').val(max_time);
         initTimeAllievi();
@@ -100,7 +100,7 @@ $('#allievi').on("change", function () {
 });
 
 $('#allievi').select2({//setta placeholder nella multiselect
-    placeholder: "Seleziona Allievi",
+    placeholder: "Seleziona Allievi"
 });
 
 function ingressiAllevi() {
@@ -133,7 +133,7 @@ function ingressiAllevi() {
                         .replace("@nome", $("#allievi option[value='" + a + "']").text()));
             }
         });
-        if (min_time != "" && max_time != "") {
+        if (min_time !== "" && max_time !== "") {
             initTimeAllievi();
             $('input.time-a').removeAttr("disabled");
             $('input.time-a').removeClass("disable-input");

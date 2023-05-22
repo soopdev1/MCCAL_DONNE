@@ -23,8 +23,8 @@ function checkpm() {
 var ore_inizili_registro;
 
 function remainingHH(total) {
-    var hh20 = 20;
-    return (hh20 - total + (ore_inizili_registro / 3600000));
+    var hh40 = 40;
+    return (hh40 - total + (ore_inizili_registro / 3600000));
 }
 
 function returnTotalHHbyAllievo(idallievo) {

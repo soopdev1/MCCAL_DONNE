@@ -57,7 +57,7 @@ function genetateTime() {
             firstDay: 1,
             format: 'HH:mm',
             daysOfWeek: days,
-            monthNames: months,
+            monthNames: months
         }
     }, function (start, end, label) {
         min_time = start.format('HH:mm');
@@ -89,7 +89,7 @@ function cssDatePicker() {
 
 $('#range2').change(function (e) {
     var date = $(e.target).val();
-    if (date != "") {
+    if (date !== "") {
         $('input.time-a.in').val(min_time);
         $('input.time-a.out').val(max_time);
         initTimeAllievi();
@@ -108,7 +108,7 @@ $('#allievi').on("change", function () {
 });
 
 $('#allievi').select2({//setta placeholder nella multiselect
-    placeholder: "Seleziona Allievi",
+    placeholder: "Seleziona Allievi"
 });
 
 function ingressiAllevi() {
@@ -141,7 +141,7 @@ function ingressiAllevi() {
                         .replace("@nome", $("#allievi option[value='" + a + "']").text()));
             }
         });
-        if (min_time != "" && max_time != "") {
+        if (min_time !== "" && max_time !== "") {
             initTimeAllievi();
             $('input.time-a').removeAttr("disabled");
             $('input.time-a').removeClass("disable-input");
@@ -222,7 +222,7 @@ function controlTotHour() {
 }
 
 function calculateHour() {
-    if ($('#range2').val() != '') {
+    if ($('#range2').val() !== '') {
         var range = $('#range2').val().split("-");
         var h1 = range[0].trim().split(":");
         var h2 = range[1].trim().split(":");

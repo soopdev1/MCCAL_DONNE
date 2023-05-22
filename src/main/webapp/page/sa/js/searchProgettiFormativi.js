@@ -539,8 +539,8 @@ function checkpm() {
 }
 
 function remainingHH(total) {
-    var hh20 = 20;
-    return (hh20 - total);
+    var hh40 = 40;
+    return (hh40 - total);
 }
 
 function checkTotalHH(m_s, m_e, p_s, p_e, check, totalms) {
@@ -595,8 +595,8 @@ function uploadRegistro(idallievo, idprogetto, srtartFb) {
     var today = values[1];
     if (totalms !== null && totalms < 20) {//&& today == false
         swaluploadRegistro(idallievo, idprogetto, totalms, srtartFb);
-    } else if (totalms === 20) {
-        swalWarning("Registro Allievo", "Il numero di ore di lezione (20h) è stato raggiunto.<br>È possibile comunque modificare nell'apposita sezione i registri caricati precedentemente.");
+    } else if (totalms === 40) {
+        swalWarning("Registro Allievo", "Il numero di ore di lezione (40h) è stato raggiunto.<br>È possibile comunque modificare nell'apposita sezione i registri caricati precedentemente.");
     }
 //    else if (today == true) {
 //        swalWarning("Registro Allievo", "Il registro di oggi è già stato caricato.<br>È possibile comunque modificarlo dall'apposita sezione.");
