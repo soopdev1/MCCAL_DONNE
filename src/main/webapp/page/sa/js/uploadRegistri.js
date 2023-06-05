@@ -34,8 +34,9 @@ function returnTotalHHbyAllievo(idallievo) {
         async: false,
         url: context + "/OperazioniSA?type=getTotalHoursRegistriByAllievo&idallievo=" + idallievo,
         success: function (resp) {
-            if (resp != null)
+            if (resp !== null) {
                 totaleore = resp;
+            }
         }
     });
     return totaleore;
@@ -52,7 +53,7 @@ function checkTotalHH(m_s, m_e, p_s, p_e, check, totalms) {
 
     if ((hhregistro / 3600000) > remainingHH(totalms)) {
         err = true;
-        msg = "Attenzione, il totale delle ore di lezione per la Fase B ha superato le 20 ore.";
+        msg = "Attenzione, il totale delle ore di lezione per la Fase B ha superato le 40 ore.";
     }
     if ((hhregistro / 3600000) > ore_max_daily) {
         err = true;
@@ -88,14 +89,14 @@ function changeRegistro(idallievo, iddocumento, idprogetto, totalems) {
             var arrows = {
                 leftArrow: '<i class="la la-angle-left"></i>',
                 rightArrow: '<i class="la la-angle-right"></i>'
-            }
+            };
             $('#giorno').datepicker({
                 orientation: "bottom left",
                 templates: arrows,
                 autoclose: true,
                 format: 'dd/mm/yyyy',
                 endDate: new Date(),
-                startDate: new Date(millis_start_fb),
+                startDate: new Date(millis_start_fb)
             });
 
 
@@ -109,7 +110,7 @@ function changeRegistro(idallievo, iddocumento, idprogetto, totalems) {
                     docenteselected = json.docente.id;
                     $('#orario1_start').val(formattedTime(json.orariostart_mattina));
                     $('#orario1_end').val(formattedTime(json.orarioend_mattina));
-                    if (json.orariostart_pom != null) {
+                    if (json.orariostart_pom !== null) {
                         $('#check').prop('checked', true);
                         $('#orario2_start').val(formattedTime(json.orariostart_pom));
                         $('#orario2_end').val(formattedTime(json.orarioend_pom));
@@ -122,19 +123,19 @@ function changeRegistro(idallievo, iddocumento, idprogetto, totalems) {
 //                        $('#orario2_start').val(formattedTime(json.orarioend_mattina + mintoadd));
 //                        $('#orario2_end').val(formattedTime(json.orarioend_mattina + mintoadd));
                     }
-                    $('#giorno').datepicker("setDate", new Date(json.giorno))//.val(formattedDate(new Date(json.giorno)));
+                    $('#giorno').datepicker("setDate", new Date(json.giorno));//.val(formattedDate(new Date(json.giorno)));
 
                     var m_s = $('#orario1_start').val();
                     var m_e = $('#orario1_end').val();
                     var p_s = $('#orario2_start').val();
-                    var p_e = $('#orario2_end').val()
+                    var p_e = $('#orario2_end').val();
                     ore_inizili_registro = new Date('00', '00', '00', m_e.split(':')[0], m_e.split(':')[1]).getTime() - new Date('00', '00', '00', m_s.split(':')[0], m_s.split(':')[1]).getTime();
                     if ($('#check').is(":checked")) {
                         ore_inizili_registro += new Date('00', '00', '00', p_e.split(':')[0], p_e.split(':')[1]).getTime() - new Date('00', '00', '00', p_s.split(':')[0], p_s.split(':')[1]).getTime();
                     }
 
 
-                    $("#tot_hh").html('Totale ore di lezione rimanenti (max 20h):&nbsp;<b>' + (remainingHH(totalems) - (ore_inizili_registro / 3600000)) + '</b>');
+                    $("#tot_hh").html('Totale ore di lezione rimanenti (max 40h):&nbsp;<b>' + (remainingHH(totalems) - (ore_inizili_registro / 3600000)) + '</b>');
                 },
                 error: function () {
                     swalError("Errore", "Errore durante il caricamento del registro");
@@ -143,7 +144,7 @@ function changeRegistro(idallievo, iddocumento, idprogetto, totalems) {
             $.get(context + "/QuerySA?type=getDocentiByPrg&idprogetto=" + idprogetto, function (resp) {
                 var json = JSON.parse(resp);
                 for (var i = 0; i < json.length; i++) {
-                    if (docenteselected == json[i].id) {
+                    if (docenteselected === json[i].id) {
                         $("#docente").append('<option selected value="' + json[i].id + '">' + json[i].cognome + " " + json[i].nome + '</option>');
                     } else {
                         $("#docente").append('<option value="' + json[i].id + '">' + json[i].cognome + " " + json[i].nome + '</option>');
@@ -195,7 +196,7 @@ function changeRegistro(idallievo, iddocumento, idprogetto, totalems) {
                         "orario1_end": $('#orario1_end').val(),
                         "orario2_start": $('#orario2_start').val(),
                         "orario2_end": $('#orario2_end').val(),
-                        "check": $('#check').is(":checked"),
+                        "check": $('#check').is(":checked")
                     });
                 });
             } else {
@@ -249,7 +250,7 @@ function checkRegistroAlievoExist(idallievo, giorno, iddocumento) {
         success: function (data) {
             var json = JSON.parse(data);
             if (json !== null) {
-                if (json.id == iddocumento) {
+                if (json.id === iddocumento) {
                     presente = false;
                     $('#alertmsg_day').html("");
                     $('#warning_day').css("display", "none");
@@ -310,14 +311,16 @@ function changeDoc(id, estensione, mime_type) {
         },
         onOpen: function () {
             $('#file').change(function (e) {
-                if (e.target.files.length != 0)
+                if (e.target.files.length !== 0) {
                     //$('#label_doc').html(e.target.files[0].name);
-                    if (e.target.files[0].name.length > 30)
+                    if (e.target.files[0].name.length > 30) {
                         $('#label_doc').html(e.target.files[0].name.substring(0, 30) + "...");
-                    else
+                    } else {
                         $('#label_doc').html(e.target.files[0].name);
-                else
+                    }
+                } else {
                     $('#label_doc').html("Seleziona File");
+                }
             });
         },
         preConfirm: function () {
@@ -361,7 +364,7 @@ function uploadSE(idallievo, id_tipoDoc, estensione, mime_type) {
         },
         onOpen: function () {
             $('#doc').change(function (e) {
-                if (e.target.files.length != 0) {
+                if (e.target.files.length !== 0) {
                     //$('#label_file').html(e.target.files[0].name);
                     if (e.target.files[0].name.length > 30) {
                         $('#label_file').html(e.target.files[0].name.substring(0, 30) + "...");
@@ -374,7 +377,7 @@ function uploadSE(idallievo, id_tipoDoc, estensione, mime_type) {
             });
             $('#prestiti').select2({
                 dropdownCssClass: "select2-on-top",
-                minimumResultsForSearch: -1,
+                minimumResultsForSearch: -1
             });
             $.get(context + "/QuerySA?type=getSE_Prestiti", function (resp) {
                 var json = JSON.parse(resp);
@@ -398,7 +401,7 @@ function uploadSE(idallievo, id_tipoDoc, estensione, mime_type) {
             } else {
                 return false;
             }
-        },
+        }
     }).then((result) => {
         if (result.value) {
             showLoad();
@@ -431,12 +434,12 @@ function changeSE(iddocumento, idse, protocollo, estensione, mime_type) {
         onOpen: function () {
             $('#prestiti').select2({
                 dropdownCssClass: "select2-on-top",
-                minimumResultsForSearch: -1,
+                minimumResultsForSearch: -1
             });
             $.get(context + "/QuerySA?type=getSE_Prestiti", function (resp) {
                 var json = JSON.parse(resp);
                 for (var i = 0; i < json.length; i++) {
-                    if (idse == json[i].id) {
+                    if (idse === json[i].id) {
                         $("#prestiti").append('<option selected value="' + json[i].id + '">' + json[i].descrizione + '</option>');
                     } else {
                         $("#prestiti").append('<option value="' + json[i].id + '">' + json[i].descrizione + '</option>');
@@ -444,14 +447,16 @@ function changeSE(iddocumento, idse, protocollo, estensione, mime_type) {
                 }
             });
             $('#doc').change(function (e) {
-                if (e.target.files.length != 0)
+                if (e.target.files.length !== 0) {
 //                    $('#label_file').html(e.target.files[0].name);
-                    if (e.target.files[0].name.length > 30)
+                    if (e.target.files[0].name.length > 30) {
                         $('#label_file').html(e.target.files[0].name.substring(0, 30) + "...");
-                    else
+                    } else {
                         $('#label_file').html(e.target.files[0].name);
-                else
+                    }
+                } else {
                     $('#label_file').html("Seleziona File");
+                }
             });
         },
         preConfirm: function () {
@@ -500,14 +505,15 @@ function uploadM8(idallievo, id_tipoDoc, estensione, mime_type) {
         },
         onOpen: function () {
             $('#doc').change(function (e) {
-                if (e.target.files.length != 0)
-                    //$('#label_file').html(e.target.files[0].name);
-                    if (e.target.files[0].name.length > 30)
+                if (e.target.files.length !== 0) {
+                    if (e.target.files[0].name.length > 30) {
                         $('#label_file').html(e.target.files[0].name.substring(0, 30) + "...");
-                    else
+                    } else {
                         $('#label_file').html(e.target.files[0].name);
-                else
+                    }
+                } else {
                     $('#label_file').html("Seleziona File");
+                }
             });
         },
         preConfirm: function () {
@@ -524,7 +530,7 @@ function uploadM8(idallievo, id_tipoDoc, estensione, mime_type) {
             } else {
                 return false;
             }
-        },
+        }
     }).then((result) => {
         if (result.value) {
             showLoad();
@@ -555,15 +561,15 @@ function changeM8(iddocumento, idea, estensione, mime_type) {
         },
         onOpen: function () {
             $('#doc').change(function (e) {
-                if (e.target.files.length != 0)
-                    //$('#label_file').html(e.target.files[0].name);
-                    if (e.target.files[0].name.length > 30)
+                if (e.target.files.length !== 0) {
+                    if (e.target.files[0].name.length > 30) {
                         $('#label_file').html(e.target.files[0].name.substring(0, 30) + "...");
-                    else
+                    } else {
                         $('#label_file').html(e.target.files[0].name);
-
-                else
+                    }
+                } else {
                     $('#label_file').html("Seleziona File");
+                }
             });
         },
         preConfirm: function () {
@@ -610,14 +616,15 @@ function uploadDoc(idallievo, id_tipoDoc, estensione, mime_type) {
         },
         onOpen: function () {
             $('#file').change(function (e) {
-                if (e.target.files.length != 0)
-                    //$('#label_doc').html(e.target.files[0].name);
-                    if (e.target.files[0].name.length > 30)
+                if (e.target.files.length !== 0) {
+                    if (e.target.files[0].name.length > 30) {
                         $('#label_doc').html(e.target.files[0].name.substring(0, 30) + "...");
-                    else
+                    } else {
                         $('#label_doc').html(e.target.files[0].name);
-                else
+                    }
+                } else {
                     $('#label_doc').html("Seleziona File");
+                }
             });
         },
         preConfirm: function () {
@@ -632,7 +639,7 @@ function uploadDoc(idallievo, id_tipoDoc, estensione, mime_type) {
             } else {
                 return false;
             }
-        },
+        }
     }).then((result) => {
         if (result.value) {
             showLoad();

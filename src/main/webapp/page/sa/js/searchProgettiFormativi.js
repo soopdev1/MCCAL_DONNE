@@ -162,7 +162,7 @@ var KTDatatablesDataSourceAjaxServer = function () {
     return {
         init: function () {
             initTable1();
-        },
+        }
     };
 }();
 
@@ -202,7 +202,7 @@ var DatatablesAllievi = function () {
                 {data: 'cognome'},
                 {data: 'codicefiscale'},
                 {data: 'datanascita'},
-                {data: 'comune_domicilio'},
+                {data: 'comune_domicilio'}
             ],
             drawCallback: function () {
                 $('[data-toggle="kt-tooltip"]').tooltip();
@@ -221,26 +221,26 @@ var DatatablesAllievi = function () {
                                 + '<div class="dropdown-menu dropdown-menu-left">';
                         option += '<a class="dropdown-item" href="javascript:void(0);" onclick="swalDocumentAllievo(' + row.id + ')"><i class="fa fa-file-alt"></i> Visualizza Documenti</a>';
 
-                        if (row.statopartecipazione.id == "01") {
-                            if (row.progetto.stato.controllare == 0) {
+                        if (row.statopartecipazione.id === "01") {
+                            if (row.progetto.stato.controllare === 0) {
                                 option += '<a class="dropdown-item " href="javascript:void(0);" onclick="swalSigma(' + row.id + ',\'' + row.statopartecipazione.id + '\')"><i class="fa fa-user-check kt-font-success" data-container="body" data-html="true" data-toggle="kt-tooltip" title="Stato ' + row.statopartecipazione.descrizione + '"></i>Cambia stato di partecipazione</a>';
-                                if (row.progetto.stato.id == "FA") {
-                                    if (row.esito == "Fase A") {
+                                if (row.progetto.stato.id === "FA") {
+                                    if (row.esito === "Fase A") {
                                         option += '<a class="dropdown-item " href="javascript:void(0);" onclick="setEsito(' + row.id + ',\'Fase B\')"><i class="fa fa-check-circle kt-font-io"></i>Continua alla Fase B</a>';
-                                    } else if (row.esito == "Fase B") {
+                                    } else if (row.esito === "Fase B") {
                                         option += '<a class="dropdown-item " href="javascript:void(0);" onclick="setEsito(' + row.id + ',\'Fase A\')"><i class="fa fa-check-circle kt-font-io-n"></i>Ferma alla Fase A</a>';
                                     }
-                                } else if (row.progetto.stato.id == "FB") {
-                                    if (row.esito == "Fase A") {
+                                } else if (row.progetto.stato.id === "FB") {
+                                    if (row.esito === "Fase A") {
                                         option += '<a class="dropdown-item "><i class="fa fa-check-circle kt-font-io"></i>Non assegnato alla Fase B</a>';
-                                    } else if (row.esito == "Fase B") {
+                                    } else if (row.esito === "Fase B") {
                                         option += '<a class="dropdown-item " href="javascript:void(0);" style="pointer-events: none;cursor: default;"><i class="fa fa-check-circle kt-font-io-n"></i>Assegnato alla Fase B</a>';
                                         option += '<a class="dropdown-item" href="javascript:void(0);" onclick="uploadRegistro(' + row.id + ',' + row.progetto.id + ',' + row.progetto.end_fa + ')" ><i class="flaticon-list"></i> Carica Registro giornaliero</a>';
                                     }
-                                } else if (row.progetto.stato.id == "FBE") {
-                                    if (row.esito == "Fase A") {
+                                } else if (row.progetto.stato.id === "FBE") {
+                                    if (row.esito === "Fase A") {
                                         option += '<a class="dropdown-item "><i class="fa fa-check-circle kt-font-io"></i>Non assegnato alla Fase B</a>';
-                                    } else if (row.esito == "Fase B") {
+                                    } else if (row.esito === "Fase B") {
                                         option += '<a class="dropdown-item " href="javascript:void(0);" style="pointer-events: none;cursor: default;"><i class="fa fa-check-circle kt-font-io-n"></i>Assegnato alla Fase B</a>';
                                         option += '<a class="dropdown-item" href="javascript:void(0);" onclick="uploadRegistro(' + row.id + ',' + row.progetto.id + ',' + row.progetto.end_fa + ')" ><i class="flaticon-list"></i> Carica Registro giornaliero</a>';
                                     }
@@ -415,9 +415,9 @@ function swalDocumentAllievo(idallievo) {
         var json = JSON.parse(resp);
         for (var i = 0; i < json.length; i++) {
             registri.set(json[i].id, json[i]);
-            giorno = json[i].giorno != null ? " del " + formattedDate(new Date(json[i].giorno)) : "";
+            giorno = json[i].giorno !== null ? " del " + formattedDate(new Date(json[i].giorno)) : "";
 
-            if (json[i].giorno != null) {
+            if (json[i].giorno !== null) {
                 registri_aula.set(json[i].id, json[i]);
                 $("#prg_docs").append(doc_registro_aula.replace("@func", "showRegistro(" + json[i].id + ")")
                         .replace("@nome", json[i].tipo.descrizione + giorno));
@@ -437,7 +437,7 @@ function swalDocumentAllievo(idallievo) {
 function showRegistro(idregistro) {
     var registro = registri.get(idregistro);
     var doc_registro;
-    if (registro.orariostart_pom != null) {
+    if (registro.orariostart_pom !== null) {
         doc_registro = getHtml("doc_registro_individiale_pomeriggio", context);
         doc_registro = doc_registro.replace("@start_pome", formattedTime(registro.orariostart_pom).replace(":0", ":00"))
                 .replace("@end_pome", formattedTime(registro.orarioend_pom).replace(":0", ":00"));
@@ -554,7 +554,7 @@ function checkTotalHH(m_s, m_e, p_s, p_e, check, totalms) {
 
     if ((hhregistro / 3600000) > remainingHH(totalms)) {
         err = true;
-        msg = "Attenzione, il totale delle ore di lezione per la Fase B ha superato le 20 ore.";
+        msg = "Attenzione, il totale delle ore di lezione per la Fase B ha superato le 40 ore.";
     }
     if ((hhregistro / 3600000) > ore_max_daily) {
         err = true;
@@ -581,7 +581,7 @@ function returnTotalHHbyAllievo(idallievo) {
         url: context + "/OperazioniSA?type=getTotalHoursRegistriByAllievo&idallievo=" + idallievo,
         success: function (resp) {
             var json = JSON.parse(resp);
-            if (resp != null)
+            if (resp !== null)
                 totaleore = json.totale;
             today = json.today;
         }
@@ -593,7 +593,7 @@ function uploadRegistro(idallievo, idprogetto, srtartFb) {
     var values = returnTotalHHbyAllievo(idallievo);
     var totalms = values[0];
     var today = values[1];
-    if (totalms !== null && totalms < 20) {//&& today == false
+    if (totalms !== null && totalms < 40) {//&& today == false
         swaluploadRegistro(idallievo, idprogetto, totalms, srtartFb);
     } else if (totalms === 40) {
         swalWarning("Registro Allievo", "Il numero di ore di lezione (40h) è stato raggiunto.<br>È possibile comunque modificare nell'apposita sezione i registri caricati precedentemente.");
@@ -604,7 +604,7 @@ function uploadRegistro(idallievo, idprogetto, srtartFb) {
 }
 
 function swaluploadRegistro(idallievo, idprogetto, totalms, srtartFb) {//swalReg
-    srtartFb = srtartFb == null ? 0 : srtartFb;
+    srtartFb = srtartFb === null ? 0 : srtartFb;
     swal.fire({
         title: 'Carica Registro',
         html: getHtml("swalReg", context),
@@ -623,7 +623,7 @@ function swaluploadRegistro(idallievo, idprogetto, totalms, srtartFb) {//swalReg
             $('#orario2_start').val('14:00');
             $('#orario2_end').val('21:00');
             $('#giorno').val(formattedDate(new Date()));
-            $("#tot_hh").html('Totale ore di lezione rimanenti (max 20h):&nbsp;<b>' + remainingHH(totalms) + '</b>');
+            $("#tot_hh").html('Totale ore di lezione rimanenti (max 40h):&nbsp;<b>' + remainingHH(totalms) + '</b>');
             $('#docente').select2({
                 dropdownCssClass: "select2-on-top",
                 minimumResultsForSearch: -1

@@ -1208,10 +1208,14 @@ public class OperazioniMicro extends HttpServlet {
             }
             
             if (request.getParameter("fb") != null) {
-                Date fb = sdf.parse(request.getParameter("fb"));
-                p.setStart_fb(fb);
-                p.setEnd_fa(fb);
+                try {
+                    Date fb = sdf.parse(request.getParameter("fb"));
+                    p.setStart_fb(fb);
+                    p.setEnd_fa(fb);
+                } catch (Exception exx1) {
+                }
             }
+            
             e.getEm().merge(p);
             e.persist(new Storico_Prg("Date del progetto modificate", new Date(), p, p.getStato()));
             e.commit();

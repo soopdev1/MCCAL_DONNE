@@ -211,7 +211,6 @@
                                                                         <div class="dropdown bootstrap-select form-control kt- paddig_0" id="misto_div">
                                                                             <select class="form-control kt-select2-general obbligatory" id="misto" name="misto">
                                                                                 <option value="NO">NO</option>
-                                                                                <option value="SI">SI</option>
                                                                             </select>
                                                                         </div>
                                                                     </div>

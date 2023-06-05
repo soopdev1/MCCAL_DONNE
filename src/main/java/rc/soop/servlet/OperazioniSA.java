@@ -689,7 +689,7 @@ public class OperazioniSA extends HttpServlet {
                     if (allievo.getEsito().equalsIgnoreCase("Fase B")) {
                         if (totale < 20) {
                             checkregistri = false;
-                            warning.append("• ").append(allievo.getCognome()).append(" ").append(allievo.getNome()).append(" (").append(String.valueOf(totale).replace(".0", "")).append("/20h)<br>");
+                            warning.append("• ").append(allievo.getCognome()).append(" ").append(allievo.getNome()).append(" (").append(String.valueOf(totale).replace(".0", "")).append("/40h)<br>");
                         }
                     }
                 }
@@ -1050,7 +1050,7 @@ public class OperazioniSA extends HttpServlet {
                 if (allievo.getEsito().equalsIgnoreCase("Fase B")) {
                     if (totale < 20) {
                         checkregistri = false;
-                        warning.append("• ").append(allievo.getCognome()).append(" ").append(allievo.getNome()).append(" (").append(String.valueOf(totale).replace(".0", "")).append("/20h)<br>");
+                        warning.append("• ").append(allievo.getCognome()).append(" ").append(allievo.getNome()).append(" (").append(String.valueOf(totale).replace(".0", "")).append("/40h)<br>");
                     }
                 }
             }
@@ -1148,7 +1148,7 @@ public class OperazioniSA extends HttpServlet {
                     }
                     if (totale < 20) {
                         checkregistri = false;
-                        warning.append("• ").append(allievo.getCognome()).append(" ").append(allievo.getNome()).append(" (").append(String.valueOf(totale).replace(".0", "")).append("/20h)<br>");
+                        warning.append("• ").append(allievo.getCognome()).append(" ").append(allievo.getNome()).append(" (").append(String.valueOf(totale).replace(".0", "")).append("/40h)<br>");
                     }
                 }
             }
@@ -1260,7 +1260,7 @@ public class OperazioniSA extends HttpServlet {
                 if (allievo.getEsito().equalsIgnoreCase("Fase B")) {
                     if (totale < 20) {
                         checkregistri = false;
-                        warning.append("• ").append(allievo.getCognome()).append(" ").append(allievo.getNome()).append(" (").append(String.valueOf(totale).replace(".0", "")).append("/20h)<br>");
+                        warning.append("• ").append(allievo.getCognome()).append(" ").append(allievo.getNome()).append(" (").append(String.valueOf(totale).replace(".0", "")).append("/40h)<br>");
                     }
                 }
             }
