@@ -498,24 +498,21 @@ function swalDocumentAllievo(idallievo) {
 function showRegistro(idregistro, controllare) {
     var registro = registri.get(idregistro);
     var doc_registro = "";
-    var totalhh = calculateHoursRegistro(registro.orariostart_mattina, registro.orarioend_mattina, registro.orariostart_pom, registro.orarioend_pom).replace(":0", ":00");
+    var totalhh = calculateHoursRegistro(registro.orariostart_mattina, registro.orarioend_mattina, registro.orariostart_pom, registro.orarioend_pom);
     totalhh = totalhh.indexOf(":") === 1 ? "0" + totalhh : totalhh;
-    if (totalhh.endsWith(':0')) {
-        totalhh += "0";
-    }
     if (registro.orariostart_pom !== null) {
         doc_registro += getHtml("doc_registro_individiale_pomeriggio", context);
-        doc_registro = doc_registro.replace("@start_pome", formattedTime(registro.orariostart_pom).replace(":0", ":00"))
-                .replace("@end_pome", formattedTime(registro.orarioend_pom).replace(":0", ":00"));
+        doc_registro = doc_registro.replace("@start_pome", formattedTime(registro.orariostart_pom))
+                .replace("@end_pome", formattedTime(registro.orarioend_pom));
     } else {
         doc_registro = getHtml("doc_registro_individiale_mattina", context);
     }
     doc_registro = controllare === 1 ? (doc_registro + getHtml("doc_registro_individiale_ctrlore", context)) : doc_registro;
-    doc_registro = doc_registro.replace("@start_pome", formattedTime(registro.orariostart_pom).replace(":0", ":00"))
+    doc_registro = doc_registro.replace("@start_pome", formattedTime(registro.orariostart_pom))
             .replace("@date", formattedDate(new Date(registro.giorno)))
             .replace("@docente", registro.docente.cognome + " " + registro.docente.nome)
-            .replace("@start_mattina", formattedTime(registro.orariostart_mattina).replace(":0", ":00"))
-            .replace("@end_mattina", formattedTime(registro.orarioend_mattina).replace(":0", ":00"))
+            .replace("@start_mattina", formattedTime(registro.orariostart_mattina))
+            .replace("@end_mattina", formattedTime(registro.orarioend_mattina))
             .replace("@tot_ore", totalhh);
     ;
     doc_registro = registro.orericonosciute === null ? doc_registro.replace('@hh', totalhh).replace('@max', totalhh).replace("@msg", "Ore da riconoscere") : doc_registro.replace('@hh', doubletoHHmm(registro.orericonosciute)).replace('@max', totalhh).replace("@msg", "Ore riconosciute");
@@ -897,8 +894,8 @@ function showRegistroAula(id, control, idprogetto) {
 
     $('#register_docs_modal').append((control === 1 ? form : "") +
             doc.replace("@date", formattedDate(new Date(registro.giorno)))
-            .replace("@start", formattedTime(registro.orariostart).replace(":0", ":00"))
-            .replace("@end", formattedTime(registro.orarioend).replace(":0", ":00"))
+            .replace("@start", formattedTime(registro.orariostart))
+            .replace("@end", formattedTime(registro.orarioend))
             .replace("@docente", registro.docente.cognome + " " + registro.docente.nome)
             .replace("@ore", doubletoHHmm(registro.ore))
             .replace("@ore_conv", registro.ore_convalidate === "00:00" ? "" : doubletoHHmm(registro.ore_convalidate))
@@ -906,8 +903,8 @@ function showRegistroAula(id, control, idprogetto) {
             .replace("@presenti",
                     registro.presenti_list.map(p => {
                         return presenze.replace("@nome", p.cognome + " " + p.nome)
-                                .replace("@in", formattedTime(p.start).replace(":0", ":00"))
-                                .replace("@out", formattedTime(p.end).replace(":0", ":00"))
+                                .replace("@in", formattedTime(p.start))
+                                .replace("@out", formattedTime(p.end))
                                 .replace("@ore", doubletoHHmm(p.ore))
                                 .replace("@max", p.ore)
                                 .replace("@readonly", control === 1 ? "" : "readonly")

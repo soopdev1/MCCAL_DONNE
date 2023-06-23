@@ -315,19 +315,19 @@ function swalDocumentAllievo(idallievo) {
 function showRegistro(idregistro) {
     var registro = registri.get(idregistro);
     var doc_registro;
-    if (registro.orariostart_pom != null) {
+    if (registro.orariostart_pom !== null) {
         doc_registro = getHtml("doc_registro_individiale_pomeriggio", context);
-        doc_registro = doc_registro.replace("@start_pome", formattedTime(registro.orariostart_pom).replace(":0", ":00"))
-                .replace("@end_pome", formattedTime(registro.orarioend_pom).replace(":0", ":00"));
+        doc_registro = doc_registro.replace("@start_pome", formattedTime(registro.orariostart_pom))
+                .replace("@end_pome", formattedTime(registro.orarioend_pom));
     } else {
         doc_registro = getHtml("doc_registro_individiale_mattina", context);
     }
-    doc_registro = doc_registro.replace("@start_pome", formattedTime(registro.orariostart_pom).replace(":0", ":00"))
+    doc_registro = doc_registro.replace("@start_pome", formattedTime(registro.orariostart_pom))
             .replace("@date", formattedDate(new Date(registro.giorno)))
             .replace("@docente", registro.docente.cognome + " " + registro.docente.nome)
-            .replace("@start_mattina", formattedTime(registro.orariostart_mattina).replace(":0", ":00"))
-            .replace("@end_mattina", formattedTime(registro.orarioend_mattina).replace(":0", ":00"))
-            .replace("@tot_ore", calculateHoursRegistro(registro.orariostart_mattina, registro.orarioend_mattina, registro.orariostart_pom, registro.orarioend_pom).replace(":0", ":00"));
+            .replace("@start_mattina", formattedTime(registro.orariostart_mattina))
+            .replace("@end_mattina", formattedTime(registro.orarioend_mattina))
+            .replace("@tot_ore", calculateHoursRegistro(registro.orariostart_mattina, registro.orarioend_mattina, registro.orariostart_pom, registro.orarioend_pom));
     swal.fire({
         title: 'Informazioni Registro',
         html: doc_registro,

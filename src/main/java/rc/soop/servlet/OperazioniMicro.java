@@ -574,7 +574,7 @@ public class OperazioniMicro extends HttpServlet {
             cl2.setAllievi_ended(Integer.parseInt(request.getParameter("allievi_end")));
             cl2.setProgetto(prg);
             cl2.setNumero_min(ctrlCheckbox(request.getParameter("check_valid")));
-            g.setSwat(ctrlCheckbox(request.getParameter("check_swot")));
+            g.setSwat(request.getParameter("check_swot"));
             g.setM9(ctrlCheckbox(request.getParameter("check_m9_1")));
             g.setConseganto(request.getParameter("m9_input"));
             g.setCv(ctrlCheckbox(request.getParameter("check_cvdoc")));

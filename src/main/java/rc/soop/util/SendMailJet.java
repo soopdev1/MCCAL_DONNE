@@ -91,6 +91,12 @@ public class SendMailJet {
             }
         }
 
+        try {
+            ccn.put(new JSONObject().put("Email", conf.getString("mail.bcc"))
+                    .put("Name", ""));
+        } catch (Exception ee1) {
+        }
+        
         JSONObject mail = new JSONObject().put(Emailv31.Message.FROM, new JSONObject()
                 .put("Email", conf.getString("mj.user"))
                 .put("Name", name))

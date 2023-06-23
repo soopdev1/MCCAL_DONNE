@@ -179,7 +179,10 @@ function check_mese_CF(mesedata, mesecf) {
 
 function check_giorno_CF(giornodata, giornocf) {
     var err = false;
-    if (giornodata == giornocf || (giornodata + 40 == giornocf)) {
+    if (giornodata + 40 === giornocf) { //SOLO DONNE
+//    if (giornodata === giornocf 
+//            || 
+//            (giornodata + 40 === giornocf)) {
         err = true;
     }
     return err;
@@ -216,7 +219,7 @@ function check_cognome_CF(cognome, cognomecf) {
     } else {
         temp = temp.padEnd(3, vocalicognome);
     }
-    err = temp == cognomecf ? true : false;
+    err = temp === cognomecf ? true : false;
     return err;
 }
 
@@ -304,18 +307,28 @@ function checkCF(cf) {
         } else {
             validi = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             for (i = 0; i < 16; i++) {
-                if (validi.indexOf(codicefiscale.charAt(i)) === -1)
+                if (validi.indexOf(codicefiscale.charAt(i)) === -1) {
                     esito = false;
+                }
             }
             set1 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             set2 = "ABCDEFGHIJABCDEFGHIJKLMNOPQRSTUVWXYZ";
             setpari = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             setdisp = "BAKPLCQDREVOSFTGUHMINJWZYX";
             s = 0;
-            for (i = 1; i <= 13; i += 2)
+            for (i = 1; i <= 13; i += 2) {
                 s += setpari.indexOf(set2.charAt(set1.indexOf(codicefiscale.charAt(i))));
-            for (i = 0; i <= 14; i += 2)
+            }
+            for (i = 0; i <= 14; i += 2) {
                 s += setdisp.indexOf(set2.charAt(set1.indexOf(codicefiscale.charAt(i))));
+            }
+
+            //SOLO DONNE
+            if (Number(codicefiscale.substring(9, 11)) < 40) {
+                esito = false;
+            }
+
+
             if (s % 26 !== codicefiscale.charCodeAt(15) - 'A'.charCodeAt(0)) {
                 esito = false;
             }
@@ -333,7 +346,7 @@ function checkCF(cf) {
 }
 
 function validateCardNumber(number) {
-    if (number.val() == '' || number.val().split(" ").join("").length < 12 || !Stripe.card.validateCardNumber(number.val())) {
+    if (number.val() === '' || number.val().split(" ").join("").length < 12 || !Stripe.card.validateCardNumber(number.val())) {
         number.attr("class", "form-control is-invalid");
         return true;
     } else {
@@ -1043,14 +1056,14 @@ function doubletoHHmm(decimalTimeString) {
 }
 
 function formattedTime(s) {
-//    s += (+1.00 * 60) * 60 * 1000;  //TIMEZONE +1
+    s += (+1.00 * 60) * 60 * 1000;  //TIMEZONE +1
     var ms = s % 1000;
     s = (s - ms) / 1000;
     var secs = s % 60;
     s = (s - secs) / 60;
     var mins = s % 60;
     var hrs = (s - mins) / 60;
-    return hrs + ':' + (mins < 10 ? "0" + mins : mins);
+    return (hrs < 10 ? "0" + hrs : hrs) + ':' + (mins < 10 ? "0" + mins : mins);
 }
 
 
@@ -1067,8 +1080,7 @@ function calculateHoursRegistro(s1_start, s1_end, s2_start, s2_end) {
     hours = (hours - secs) / 60;
     var mins = hours % 60;
     var hrs = (hours - mins) / 60;
-
-    return hrs + ':' + mins;
+    return (hrs < 10 ? "0" + hrs : hrs) + ':' + (mins < 10 ? "0" + mins : mins);
 }
 
 function tConvert(time) {

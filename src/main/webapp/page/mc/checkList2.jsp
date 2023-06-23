@@ -161,6 +161,16 @@
                                                 <div class="row col" style="color: #464457;">
                                                     <h5>Verifiche di sistema, presenza dei documenti amministrativi di percorso</h5>
                                                 </div>
+                                                <div class="form-group">
+                                                    <label>Presenza Analisi Swot</label><label class='kt-font-danger kt-font-boldest'>*</label>
+                                                    <div class="select-div" id="check_swot_div">
+                                                        <select class="form-control kt-select2 obbligatory" id="check_swot" name="check_swot">
+                                                            <option value="NON APPLICABILE">NON APPLICABILE</option>
+                                                            <option value="SI">SI</option>
+                                                            <option value="NO">NO</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
                                                 <div class="form-group row customcheck">
                                                     <div class="col-2 kt-align-right"><span class="kt-switch kt-switch--outline kt-switch--icon kt-switch--primary">
                                                             <label>

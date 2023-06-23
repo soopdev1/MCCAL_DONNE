@@ -281,6 +281,8 @@ function EmailPresente() {
 
 $('#codicefiscale').on("change", function () {
     if (checkCF($('#codicefiscale'))) {
+        
+        
         CFPresent();
     }
 });
@@ -316,13 +318,14 @@ function checkinfoCF() {
         checkdata = true;
     }
     if (!check_giorno_CF(Number(data.val().substring(0, 2)), Number(cf.val().substring(9, 11)))) {
-        msg += err ? ", Giorno di nascita" : "Giorno di nascita";
+        msg += err ? ", Giorno di nascita (solo DONNE ammesse)" : "Giorno di nascita (solo DONNE ammesse)";
         checkdata = true;
     }
     if (data.val().substring(8) !== cf.val().substring(6, 8)) {
         msg += err ? ", Anno di nascita" : "Anno di nascita";
         checkdata = true;
     }
+    
     if (checkdata) {
         err = true;
         $('#datanascita').removeClass("is-valid").addClass("is-invalid");
