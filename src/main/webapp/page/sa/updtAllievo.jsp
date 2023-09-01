@@ -391,29 +391,12 @@
                                                                             <label>Email </label><label class="kt-font-danger kt-font-boldest">*</label>
                                                                             <input type="text" class="form-control" id="email" name="email" value="<%=a.getEmail()%>" />
                                                                         </div>
-                                                                        <div class="form-group col-lg-4">
-                                                                            <label>Centro per l'impiego di competenza </label><label class="kt-font-danger kt-font-boldest">*</label>
-                                                                            <div class="dropdown bootstrap-select form-control kt-" id="cpi_div" style="padding: 0;">
-                                                                                <select class="form-control kt-select2-general obbligatory" id="cpi" name="cpi"  style="width: 100%">
-                                                                                    <option value="-">Seleziona CPI</option>
-                                                                                    <%for (CPI c : cpi) {
-                                                                                            if (c.getId().equals(a.getCpi().getId())) {%>
-                                                                                    <option value="<%=c.getId()%>" selected><%=c.getDescrizione()%></option>
-                                                                                    <%} else {%>
-                                                                                    <option value="<%=c.getId()%>"><%=c.getDescrizione()%></option>
-                                                                                    <%}
-                                                                                        }%>
-                                                                                </select>
-                                                                            </div>
-                                                                        </div>
                                                                         <div class="form-group col-lg-2">
-                                                                            <label>Data iscrizione G.G. </label><label class="kt-font-danger kt-font-boldest">*</label>
+                                                                            <label>Data Compilazione Modello 1 </label><label class="kt-font-danger kt-font-boldest">*</label>
                                                                             <input type="text" class="form-control obbligatory" name="iscrizionegg" id="iscrizionegg" value="<%=sdf.format(a.getIscrizionegg())%>"  />
                                                                         </div>
-                                                                        <div class="form-group col-lg-2">
-                                                                            <label>Presa in carico CPI </label><label class="kt-font-danger kt-font-boldest">*</label>
-                                                                            <input type="text" class="form-control obbligatory" name="datacpi" id="datacpi" value="<%=sdf.format(a.getDatacpi())%>"  />
-                                                                        </div>
+                                                                        <input type="hidden" name="cpi" id="cpi" value="CPICZ1" />
+                                                                        <input type="hidden" name="datacpi" id="datacpi" value="01/01/2023" />
                                                                     </div> 
                                                                 </div>    
                                                                 <div class="col-lg-2 kt-align-right">
@@ -858,7 +841,7 @@
                 err = !checkRequiredFile() ? true : err;
                 err = !checkFileExtAndDim(['pdf']) ? true : err;
                 return !err;
-                
+
             }
 
             $('a.submit_change').on('click', function () {
@@ -988,7 +971,7 @@
                                     url: "<%=request.getContextPath()%>/OperazioniSA?type=getCodiceCatastaleComune&idcomune=" + $('#comunenascita').val(),
                                     success: function (resp) {
                                         $('#stato_div').removeClass("is-invalid-select").addClass("is-valid-select");
-                                        if (check_comune_CF(resp,cf.val().substring(11, 15).toUpperCase())) {
+                                        if (check_comune_CF(resp, cf.val().substring(11, 15).toUpperCase())) {
 //                                        if (resp != cf.val().substring(11, 15).toUpperCase()) {
                                             msg += err ? ", Comune di nascita" : "Comune di nascita";
                                             $('#comunenascita_div').removeClass("is-valid-select").addClass("is-invalid-select");

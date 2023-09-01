@@ -133,36 +133,7 @@
                                                                 <input class="form-control" name="cf" id="cf" autocomplete="off">
                                                             </div>
                                                         </div>
-                                                        <div class="form-group row">
-                                                            <div class="col-lg-3">
-                                                                <label>Centro per l'impiego di iscrizione </label>
-                                                                <div class="dropdown bootstrap-select form-control kt-" id="cpi_div" style="padding: 0;height: 35px;">
-                                                                    <select class="form-control kt-select2-general" id="cpi" name="cpi"  style="width: 100%">
-                                                                        <option value="-">Seleziona CPI</option>
-                                                                        <%for (CPI c : cpi) {%>
-                                                                        <option value="<%=c.getId()%>"><%=c.getDescrizione()%></option>
-                                                                        <%}%>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-lg-4">
-                                                                <label>Pregresso:</label><br>
-                                                                <div class="kt-radio-inline">
-                                                                    <label class="kt-radio">
-                                                                        <input type="radio" value="" checked name="pregresso">. .
-                                                                        <span></span>
-                                                                    </label>
-                                                                    <label class="kt-radio kt-radio--io">
-                                                                        <input type="radio" value="1" name="pregresso">Si
-                                                                        <span></span>
-                                                                    </label>
-                                                                    <label class="kt-radio kt-radio--io-n">
-                                                                        <input type="radio" value="0" name="pregresso">No
-                                                                        <span></span>
-                                                                    </label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                                        <input type="hidden" name="cpi" value=""/>
                                                     </div>
                                                     <div class="kt-portlet__foot">
                                                         <div class="kt-form__actions">
@@ -209,8 +180,7 @@
                                                         <th class="text-uppercase text-center">Data Nascita</th>
                                                         <th class="text-uppercase text-center">Residenza</th>
                                                         <th class="text-uppercase text-center">Domicilio</th>
-                                                        <th class="text-uppercase text-center">Data Iscrizione G.G.</th>
-                                                        <th class="text-uppercase text-center">C.P.I.</th>
+                                                        <th class="text-uppercase text-center">Data Compilazione Modello 1</th>
                                                         <th class="text-uppercase text-center">Protocollo</th>
                                                         <th class="text-uppercase text-center">Ore Fase A</th>
                                                         <th class="text-uppercase text-center">Ore Fase B</th>
@@ -329,7 +299,7 @@
                         processing: true,
                         pageLength: 10,
                         ajax: context + '/QueryMicro?type=searchAllievo&soggettoattuatore=' + $('#soggettoattuatore').val() + '&cf=' + $('#cf').val()
-                                + '&nome=' + $('#nome').val() + '&cognome=' + $('#cognome').val() + '&cpi=' + $('#cpi').val() + '&pregresso=' + $('input[name=pregresso]:checked').val(),
+                                + '&nome=' + $('#nome').val() + '&cognome=' + $('#cognome').val() + '&cpi=' + $('#cpi').val() + '&pregresso=',
                         order: [],
                         columns: [
                             {defaultContent: ''},
@@ -341,7 +311,6 @@
                             {data: 'indirizzoresidenza'},
                             {data: 'indirizzodomicilio'},
                             {data: 'iscrizionegg'},
-                            {data: 'cpi.descrizione'},
                             {data: 'protocollo'},
                             {data: 'ore_fa'},
                             {data: 'ore_fb'},
@@ -351,11 +320,7 @@
                             $('[data-toggle="kt-tooltip"]').tooltip();
                         },
                         rowCallback: function (row, data) {
-                            if (!data.pregresso) {
-                                $(row).attr("id", "row_" + data.id);
-                            } else {
-                                $(row).attr("id", "row_" + data.id + "_pregresso");
-                            }
+
                         },
                         columnDefs: [
                             {
@@ -374,25 +339,7 @@
                                     }
                                     option += '<a class="dropdown-item" href="javascript:void(0);" onclick="swalDocumentAllievo(' + row.id + ')"><i class="fa fa-file-alt"></i> Visualizza Documenti</a>';
 //                                    option += '<a class="dropdown-item" href="#"><i class="fa fa-list"></i> Visualizza Registro</a>';
-
-                                    if (!row.pregresso) {
-                                        option += '<a class="dropdown-item" href="javascript:void(0);" onclick="swalNoteAllievo('
-                                                + row.id + ')"><i class="fa fa-sticky-note"></i> Visualizza/Modifica Note</a>';
-                                    }
-
                                     option += '</div></div>';
-                                    if (row.pregresso) {
-                                        option = '<div class="dropdown dropdown-inline">'
-                                                + '<button type="button" class="btn btn-icon btn-icon-md btn-io" data-toggle="dropdown" aria-haspopup="true" '
-                                                + 'aria-expanded="false" data-container="body" data-html="true" data-toggle="kt-tooltip" data-placement="top" title="Pregresso">'
-                                                + '<font color="white">P</font>'
-                                                + '</button>'
-                                                + '<div class="dropdown-menu dropdown-menu-left">';
-                                        option += '<a class="dropdown-item fancyBoxAntoRef" href="uploadDocAllieviPregresso.jsp?id=' + row.id + '"><i class="fa fa-file-alt"></i> Visualizza/Carica Documenti</a>';
-                                        option += '</div></div>';
-//                                        return '<div><button type="button" class="btn btn-io" data-container="body" data-html="true" data-toggle="kt-tooltip" data-placement="top" title="Pregresso"><font color="white">P</font></button></div>';
-                                    }
-
                                     return option;
 
                                 }
@@ -420,14 +367,10 @@
                                 targets: 8,
                                 type: 'date-it',
                                 render: function (data, type, row, meta) {
-                                    if (row.pregresso) {
-                                        return "<div></div>";
-                                    } else {
-                                        return formattedDate(new Date(row.iscrizionegg));
-                                    }
+                                    return formattedDate(new Date(row.iscrizionegg));
                                 }
                             }, {
-                                targets: 13,
+                                targets: 12,
                                 className: 'text-center',
                                 orderable: false,
                                 render: function (data, type, row, meta) {
@@ -439,17 +382,6 @@
                                                 + 'data-container="body" data-html="true" data-toggle="kt-tooltip"'
                                                 + 'data-placement="top" title="<h6>Scadenza:</h6><h5>'
                                                 + formattedDate(new Date(row.scadenzadocid)) + '</h5>">&nbsp;<i class="fa fa-exclamation-triangle"></i></a>';
-                                    }
-                                    if (row.pregresso) {
-                                        if (row.docid === null || row.docid === "") {
-                                            option = '<a class="btn btn-io-n" style="font-size: 20px"'
-                                                    + 'data-container="body" data-html="true" data-toggle="kt-tooltip"'
-                                                    + 'data-placement="top" title="<h6>Doc Id. non caricato</h6>">&nbsp;<i class="fa fa-exclamation-triangle"></i></a>';
-                                        } else {
-                                            option = '<a href="' + context + '/OperazioniGeneral?type=showDoc&path=' + row.docid + '" class="btn btn-io fa fa-address-card fancyDocument" style="font-size: 20px;"'
-                                                    + 'data-container="body" data-html="true" data-toggle="kt-tooltip"'
-                                                    + 'data-placement="top" title="<h6>Doc Id.</h6>"></a>';
-                                        }
                                     }
                                     return option;
                                 }
@@ -473,7 +405,7 @@
                 $('html, body').animate({scrollTop: $('#offsetresult').offset().top}, 500);
                 load_table($('#kt_table_1'), context + '/QueryMicro?type=searchAllievo&soggettoattuatore=' + $('#soggettoattuatore').val()
                         + '&cf=' + $('#cf').val() + '&nome=' + $('#nome').val() + '&cognome=' + $('#cognome').val()
-                        + '&cpi=' + $('#cpi').val() + '&pregresso=' + $('input[name=pregresso]:checked').val(), );
+                        + '&cpi=' + $('#cpi').val() + '&pregresso=', );
             }
 
             function reload() {
@@ -556,7 +488,7 @@
                     }
                 });
             }
-            
+
             //NOTE 16-08-2021
             function getNoteAllievo(idallievo) {
                 var notes = "";

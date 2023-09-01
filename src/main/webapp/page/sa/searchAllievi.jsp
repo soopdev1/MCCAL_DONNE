@@ -125,17 +125,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="form-group row">
-                                                            <div class="col-xl-3 col-lg-6">
-                                                                <label>Centro per l'impiego di iscrizione </label>
-                                                                <div class="dropdown bootstrap-select form-control kt-" id="cpi_div" style="padding: 0;height: 35px;">
-                                                                    <select class="form-control kt-select2-general" id="cpi" name="cpi"  style="width: 100%">
-                                                                        <option value="-">Seleziona CPI</option>
-                                                                        <%for (CPI c : cpi) {%>
-                                                                        <option value="<%=c.getId()%>"><%=c.getDescrizione()%></option>
-                                                                        <%}%>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
+                                                            <input type="hidden" name="cpi" value="" />
                                                             <div class="col-xl-3 col-lg-6">
                                                                 <label class="form-label">Stato:</label>
                                                                 <div class="kt-radio-inline">
@@ -200,8 +190,7 @@
                                                         <th class="text-uppercase text-center">Residenza</th>
                                                         <th class="text-uppercase text-center">Domicilio</th>
                                                         <th class="text-uppercase text-center">Titolo Studio</th>
-                                                        <th class="text-uppercase text-center">Iscrizione a GG</th>
-                                                        <th class="text-uppercase text-center">CPI</th>
+                                                        <th class="text-uppercase text-center">Data Compilazione Modello 1</th>
                                                         <th class="text-uppercase text-center">Stato</th>
                                                         <th class="text-uppercase text-center">N. Protocollo</th>
                                                         <th class="text-uppercase text-center">Documento d'Identità</th>

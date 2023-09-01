@@ -63,7 +63,6 @@ var KTDatatablesDataSourceAjaxServer = function () {
                     render: function (data, type, row) {
                         return moment(row.iscrizionegg).format("DD/MM/YYYY");
                     }},
-                {data: 'cpi.descrizione'},
                 {data: 'stato',
                     className: 'text-center',
                     render: function (data, type, row) {
@@ -109,10 +108,10 @@ var KTDatatablesDataSourceAjaxServer = function () {
                     }
                 },
                 {
-                    targets: 9,
+                    targets: 8,
                     orderable: false,
                 }, {
-                    targets: 11,
+                    targets: 10,
                     className: 'text-center',
                     orderable: false,
                     render: function (data, type, row, meta) {

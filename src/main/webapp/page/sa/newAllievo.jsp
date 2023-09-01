@@ -149,7 +149,7 @@
                                                                             <select class="form-control kt-select2-general obbligatory" id="stato" name="stato"  style="width: 100%">
                                                                                 <option value="-">Seleziona Stato</option>
                                                                                 <%for (Comuni c : cittadinanza) {%>
-                                                                                    <option value="<%=c.getIstat()%>" data-cf="<%=c.getCodicicatastali_altri()%>"><%=c.getNome()%></option>
+                                                                                <option value="<%=c.getIstat()%>" data-cf="<%=c.getCodicicatastali_altri()%>"><%=c.getNome()%></option>
                                                                                 <%}%>
                                                                             </select>
                                                                         </div>
@@ -189,7 +189,7 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="form-row" id="msgrow" style="display:block">
-                                                                        <label id="msg_cf"></label>
+                                                                    <label id="msg_cf"></label>
                                                                 </div>
                                                                 <div class="form-row">
                                                                     <div class="form-group col-xl-3 col-lg-6">
@@ -365,25 +365,15 @@
                                                                         <label>Email </label><label class="kt-font-danger kt-font-boldest">*</label>
                                                                         <input type="text" class="form-control obbligatory" id="email" name="email" />
                                                                     </div>
-                                                                    <div class="form-group col-xl-4 col-lg-6">
-                                                                        <label>Centro per l'impiego di competenza </label><label class="kt-font-danger kt-font-boldest">*</label>
-                                                                        <div class="dropdown bootstrap-select form-control kt-" id="cpi_div" style="padding: 0;">
-                                                                            <select class="form-control kt-select2-general obbligatory" id="cpi" name="cpi"  style="width: 100%">
-                                                                                <option value="-">Seleziona CPI</option>
-                                                                                <%for (CPI c : cpi) {%>
-                                                                                <option value="<%=c.getId()%>"><%=c.getDescrizione()%></option>
-                                                                                <%}%>
-                                                                            </select>
-                                                                        </div>
-                                                                    </div>
+                                                                    <input type="hidden" name="cpi" id="cpi" value="CPICZ1" />
+                                                                    <input type="hidden" name="datacpi" id="datacpi" value="01/01/2023" />
+
                                                                     <div class="form-group col-xl-2 col-lg-6">
-                                                                        <label>Data iscrizione G.G. </label><label class="kt-font-danger kt-font-boldest">*</label>
-                                                                        <input type="text" class="form-control obbligatory" name="iscrizionegg" id="iscrizionegg" autocomplete="off" readonly/>
+                                                                        <label>Data Compilazione Modello 1 </label><label class="kt-font-danger kt-font-boldest">*</label>
+                                                                        <input type="text" class="form-control obbligatory" 
+                                                                               name="iscrizionegg" id="iscrizionegg" autocomplete="off" readonly/>
                                                                     </div>
-                                                                    <div class="form-group col-xl-2 col-lg-6">
-                                                                        <label>Data presa in carico CPI </label><label class="kt-font-danger kt-font-boldest">*</label>
-                                                                        <input type="text" class="form-control obbligatory" name="datacpi" id="datacpi" autocomplete="off" readonly/>
-                                                                    </div>
+
                                                                 </div>
                                                                 <div class="form-group row">
                                                                     <%for (TipoDoc_Allievi t : tipo_doc) {%>

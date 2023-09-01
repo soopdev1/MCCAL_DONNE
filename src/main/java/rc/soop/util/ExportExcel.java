@@ -272,18 +272,15 @@ public class ExportExcel {
                     writeCell(row, a.getComune_residenza().getProvincia());
                     writeCell(row, getCodIstat(a.getComune_residenza()));
                     writeCell(row, a.getComune_domicilio().getNome());
-//                writeCell(row, a.getComune_domicilio().getRegione());
                     writeCell(row, a.getComune_domicilio().getProvincia());
                     writeCell(row, getCodIstat(a.getComune_domicilio()));
                     writeCell(row, a.getTitoloStudio().getDescrizione());
                     writeCell(row, a.getTitoloStudio().getCodice());
-//29-04-2020 MODIFICA - CONDIZIONE LAVORATIVA PRECEDENTE
-//writeCell(row, a.getNeet());
                     writeCell(row, a.getCondizione_lavorativa().getDescrizione());
                     writeCell(row, a.getCondizione_mercato().getId());
                     writeCell(row, sdf.format(a.getData_up()));
                     writeCell(row, sdf.format(a.getIscrizionegg()));
-                    writeCell(row, a.getCpi().getDescrizione());
+                   // writeCell(row, a.getCpi().getDescrizione());
                     writeCell(row, String.valueOf(calcolaEta(a.getDatanascita())));
                     writeCell(row, p.getSoggetto().getRagionesociale());
                     writeCell(row, p.getCip());
