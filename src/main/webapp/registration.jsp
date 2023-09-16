@@ -12,6 +12,9 @@
     Entity e = new Entity();
     List<Item> regioni = e.listaRegioni();
     String g_p_key = e.getPath("googleSiteKey");
+    String privacy = e.getPath("path.privacy");
+    String privacyT = e.getPath("path.privacy.testo");
+
     e.close();
 %>
 
@@ -62,7 +65,7 @@
                 margin-bottom: 1rem!important;
             }
             .kt-login__container{
-                max-width:1400px!important; 
+                max-width:1400px!important;
                 width: 100%!important;
             }
             .kt-login__signin{
@@ -134,7 +137,7 @@
                                                 <input class="form-control" type="text" placeholder="Codice Fiscale " name="cf" id="cf"  autocomplete="off">
                                             </div>
                                             <div class="col-lg-12">
-                                            <h6 style="padding-right: 10px; padding-top:10px;color: #fd397a!important;">È obbligatorio inserire il CF o la P.IVA</h6>
+                                                <h6 style="padding-right: 10px; padding-top:10px;color: #fd397a!important;">È obbligatorio inserire il CF o la P.IVA</h6>
                                             </div>
                                             <h5 style="padding-left: 10px;">Contatti</h5>
                                             <div class="input-group">
@@ -237,15 +240,22 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row kt-login__extra">
-                                        <div class="col-lg-6">
-                                            <label class="kt-checkbox" id="l_termini">
-                                                <input type="checkbox" name="agree" id="agree">Accetto <a href="#" class="kt-link kt-login__link kt-font-bold">termini e condizioni</a>.
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-lg-2">
+                                            <h5>
+                                                <a target="_blank" 
+                                                   href="<%=request.getContextPath()%>/redirect.jsp?page=OperazioniGeneral&type=showDoc&path=<%=privacy.replaceAll("\\\\", "/")%>"
+                                                   class="kt-login__link document">Privacy Policy Web</a></h5>
+
+
+                                        </div>
+                                        <div class="col-lg-6"><label class="kt-checkbox" id="l_termini">
+                                                <input type="checkbox" name="agree" id="agree">
+                                                <%=privacyT%>
                                                 <span></span>
                                             </label>
-                                            <span class="form-text text-muted"></span>
-                                        </div>
-                                        <div class="col-lg-2"></div>
+                                            <span class="form-text text-muted"></span></div>
                                         <div hidden class="col-lg-4">
                                             <div class="g-recaptcha" data-sitekey="6LdnLwgUAAAAAAIb9L3PQlHQgvSCi16sYgbMIMFR"></div>
                                             <script src='https://www.google.com/recaptcha/api.js'></script>
