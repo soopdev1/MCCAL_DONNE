@@ -298,9 +298,9 @@
                                     if (row.curriculum !== null) {
                                         option += '<a class="fancyDocument dropdown-item" href="<%=request.getContextPath()%>/OperazioniGeneral?type=showDoc&path=' + row.curriculum + '"><i class="fa fa-file-invoice"></i>Visualizza Curriculum</a>';
                                     }
-                                    if (row.assegnato) {
-                                        option += '<a class="dropdown-item" href="javascript:void(0);" onclick="swalTablePrg(' + row.id + ')"><i class="fa fa-list"></i>Progetti Formativi</a>';
-                                    } 
+                                   // if (row.assegnato) {
+                                   //     option += '<a class="dropdown-item" href="javascript:void(0);" onclick="swalTablePrg(' + row.id + ')"><i class="fa fa-list"></i>Progetti Formativi</a>';
+                                   // } 
                                     option += '</div></div>';
                                     return option;
                                 }

@@ -65,7 +65,7 @@ public class OperazioniGeneral extends HttpServlet {
                     page += "ci/indexCi.jsp";
                     break;
                 default:
-                    page += "sa/indexMicrocredito.jsp";
+                    page += "mc/indexMicrocredito.jsp";
                     break;
             }
             response.sendRedirect("redirect.jsp?page=" + page + "&fileNotFound=true");

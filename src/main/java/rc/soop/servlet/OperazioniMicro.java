@@ -54,13 +54,11 @@ import static rc.soop.util.Utility.ctrlCheckbox;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.PersistenceException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -79,23 +77,24 @@ import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import static rc.soop.util.ExcelFAD.generatereportFAD_multistanza;
 
 /**
  *
  * @author rcosco
  */
 public class OperazioniMicro extends HttpServlet {
-    
+
     protected void setProtocollo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Entity e = new Entity();
         JsonObject resp = new JsonObject();
         try {
             e.begin();
-            
+
             SoggettiAttuatori sa = e.getEm().find(SoggettiAttuatori.class, Long.valueOf(request.getParameter("id")));
             sa.setProtocollo(request.getParameter("protocollo"));
             sa.setDataprotocollo(new SimpleDateFormat("dd/MM/yyyy").parse(request.getParameter("data")));
-            
+
             User us = e.getUserbySA(sa);
             if (us.getTipo() != 1) {
                 if (e.updateuserTipo(1, sa)) {
@@ -119,7 +118,7 @@ public class OperazioniMicro extends HttpServlet {
         response.getWriter().flush();
         response.getWriter().close();
     }
-    
+
     protected void addDocente(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Entity e = new Entity();
         JsonObject resp = new JsonObject();
@@ -149,7 +148,7 @@ public class OperazioniMicro extends HttpServlet {
         response.getWriter().flush();
         response.getWriter().close();
     }
-    
+
     protected void addDocenteFile(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         JsonObject resp = new JsonObject();
         Part p = request.getPart("file");
@@ -173,12 +172,12 @@ public class OperazioniMicro extends HttpServlet {
         } finally {
             e.close();
         }
-        
+
         response.getWriter().write(resp.toString());
         response.getWriter().flush();
         response.getWriter().close();
     }
-    
+
     protected void addAuleFile(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         JsonObject resp = new JsonObject();
         resp.addProperty("result", false);
@@ -187,26 +186,26 @@ public class OperazioniMicro extends HttpServlet {
         response.getWriter().flush();
         response.getWriter().close();
     }
-    
+
     protected void addAula(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Entity e = new Entity();
         JsonObject resp = new JsonObject();
         try {
             e.begin();
-            
+
             String denominazione = request.getParameter("denom");
             String via = request.getParameter("via");
             String referente = request.getParameter("referente");
             String telefono = request.getParameter("phone").equals("") ? null : request.getParameter("phone");
             String cellulare = request.getParameter("cellulare").equals("") ? null : request.getParameter("cellulare");
             String email = request.getParameter("email").equals("") ? null : request.getParameter("email");
-            
+
             Comuni c = e.getEm().find(Comuni.class, Long.valueOf(request.getParameter("comune")));
             SediFormazione s = new SediFormazione(denominazione, via, referente, telefono, cellulare, email, c);
-            
+
             e.persist(s);
             e.commit();
-            
+
             resp.addProperty("result", true);
         } catch (Exception ex) {
             e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro addAula: " + estraiEccezione(ex));
@@ -219,9 +218,9 @@ public class OperazioniMicro extends HttpServlet {
         response.getWriter().flush();
         response.getWriter().close();
     }
-    
+
     protected void validatePrg(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
+
         Entity e = new Entity();
         JsonObject resp = new JsonObject();
         boolean check = true;
@@ -239,7 +238,7 @@ public class OperazioniMicro extends HttpServlet {
 //                    int id_pro = d1.verificaCIP(cip_prof);
 //                    d1.closeDB();
 //                    if (id_pro > 0) {
-                        p.setCip_misto(cip_prof);
+                    p.setCip_misto(cip_prof);
 //                        Database d2 = new Database(true);
 //                        check = d2.updateCIPMisto(id_pro, cip_neet);
 //                        d2.closeDB();
@@ -253,7 +252,7 @@ public class OperazioniMicro extends HttpServlet {
                 }
             }
             if (check) {
-                
+
                 if (p.getStato().getId().equals("FB1")) {//check registri songoli e aula
                     if (!checkValidateRegisterAllievo(e.getRegistriAllievi(e.getAllieviProgettiFormativi(p))) || !checkValidateRegister(e.getregisterPrg(p))) {
                         check = false;
@@ -264,7 +263,7 @@ public class OperazioniMicro extends HttpServlet {
                 } else {
                     p.setStato(e.getStatiByOrdineProcesso(p.getStato().getOrdine_processo() + 1));//STATO fase successiva
                 }
-                
+
                 if (check) {
                     e.persist(new Storico_Prg((p.getStato().getId().equals("AR") ? "Archiviato" : "Convalidato") + fineFa, new Date(), p, p.getStato()));//storico progetto
                     p.setControllable(0);
@@ -275,9 +274,9 @@ public class OperazioniMicro extends HttpServlet {
 
                     //INVIO MAIL
                     SendMailJet.notifica_cambiostato_SA(e, p);
-                    
+
                 }
-                
+
                 if (p.getStato().getId().equals("C")) {
                     ExportExcel.compileTabella1(p.getId());
                 }
@@ -293,9 +292,9 @@ public class OperazioniMicro extends HttpServlet {
         response.getWriter().write(resp.toString());
         response.getWriter().flush();
         response.getWriter().close();
-        
+
     }
-    
+
     protected void eliminaDocente(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Entity e = new Entity();
         JsonObject resp = new JsonObject();
@@ -317,7 +316,7 @@ public class OperazioniMicro extends HttpServlet {
         response.getWriter().flush();
         response.getWriter().close();
     }
-    
+
     protected void annullaPrg(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Entity e = new Entity();
         JsonObject resp = new JsonObject();
@@ -334,7 +333,7 @@ public class OperazioniMicro extends HttpServlet {
                 a1.setStatopartecipazione((StatoPartecipazione) e.getEm().find(StatoPartecipazione.class, "03"));
                 e.merge(a1);
             });
-            
+
             e.commit();
             resp.addProperty("result", true);
         } catch (Exception ex) {
@@ -349,7 +348,7 @@ public class OperazioniMicro extends HttpServlet {
         response.getWriter().flush();
         response.getWriter().close();
     }
-    
+
     protected void rejectPrg(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Entity e = new Entity();
         JsonObject resp = new JsonObject();
@@ -375,7 +374,7 @@ public class OperazioniMicro extends HttpServlet {
         response.getWriter().flush();
         response.getWriter().close();
     }
-    
+
     protected void validateHourRegistroAula(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Entity e = new Entity();
         JsonObject resp = new JsonObject();
@@ -387,7 +386,7 @@ public class OperazioniMicro extends HttpServlet {
             doc.setOre_convalidate(ore_ric);
             doc.setValidate(1);
             List<Presenti> presenti = doc.getPresenti_list();
-            
+
             for (Presenti p : presenti) {
                 hhmm = request.getParameter("ore_riconsciute_" + p.getId()).split(":");
                 ore_ric = Double.parseDouble(hhmm[0]) + (Double.parseDouble(hhmm[1]) / 60);
@@ -444,10 +443,10 @@ public class OperazioniMicro extends HttpServlet {
         response.getWriter().flush();
         response.getWriter().close();
     }
-    
+
     protected void modifyDoc(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         JsonObject resp = new JsonObject();
-        
+
         Part p = request.getPart("file");
         Entity e = new Entity();
         try {
@@ -456,7 +455,7 @@ public class OperazioniMicro extends HttpServlet {
             DocumentiPrg d = e.getEm().find(DocumentiPrg.class, Long.valueOf(request.getParameter("id")));
             p.write(d.getPath());
             d.setScadenza(scadenza);
-            
+
             if (scadenza != null) {
                 List<DocumentiPrg> doc_mod = e.getDocIdModifiableDocente(((User) request.getSession().getAttribute("user")).getSoggettoAttuatore(), d.getDocente());
                 doc_mod.remove(d);
@@ -465,7 +464,7 @@ public class OperazioniMicro extends HttpServlet {
                     doc.setScadenza(scadenza);
                 }
             }
-            
+
             e.commit();
             resp.addProperty("result", true);
         } catch (Exception ex) {
@@ -476,15 +475,15 @@ public class OperazioniMicro extends HttpServlet {
         } finally {
             e.close();
         }
-        
+
         response.getWriter().write(resp.toString());
         response.getWriter().flush();
         response.getWriter().close();
     }
-    
+
     protected void uploadDocPrg(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         JsonObject resp = new JsonObject();
-        
+
         Part p = request.getPart("file");
         Entity e = new Entity();
         try {
@@ -525,10 +524,10 @@ public class OperazioniMicro extends HttpServlet {
             } else {
                 resp.addProperty("message", "");
             }
-            
+
             e.commit();
             resp.addProperty("result", true);
-            
+
         } catch (Exception ex) {
             e.rollBack();
             e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniSA uploadDocPrg: " + estraiEccezione(ex));
@@ -537,17 +536,17 @@ public class OperazioniMicro extends HttpServlet {
         } finally {
             e.close();
         }
-        
+
         response.getWriter().write(resp.toString());
         response.getWriter().flush();
         response.getWriter().close();
     }
-    
+
     protected void compileCL2(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Check2 cl2 = new Check2();
         Gestione g = new Gestione();
         Fascicolo f = new Fascicolo();
-        
+
         Entity e = new Entity();
         JsonObject resp = new JsonObject();
         try {
@@ -581,7 +580,7 @@ public class OperazioniMicro extends HttpServlet {
             g.setM13(ctrlCheckbox(request.getParameter("check_m13")));
             g.setRegistro(ctrlCheckbox(request.getParameter("check_regdoc")));
             g.setStato(ctrlCheckbox(request.getParameter("check_chiuso")));
-            
+
             cl2.setGestione(g);
             f.setNote(request.getParameter("note") == null ? "" : new String(request.getParameter("note").getBytes(Charsets.ISO_8859_1), Charsets.UTF_8));
             f.setNote_esito(request.getParameter("note_esito") == null ? "" : new String(request.getParameter("note_esito").getBytes(Charsets.ISO_8859_1), Charsets.UTF_8));
@@ -592,7 +591,7 @@ public class OperazioniMicro extends HttpServlet {
             f.setM2(ctrlCheckbox(request.getParameter("check_m2")));
             f.setM9(ctrlCheckbox(request.getParameter("check_m9_2")));
             cl2.setFascicolo(f);
-            
+
             VerificheAllievo ver;
             List<VerificheAllievo> list_al = new ArrayList();
             for (String s : request.getParameterValues("allievi[]")) {
@@ -606,7 +605,7 @@ public class OperazioniMicro extends HttpServlet {
                 list_al.add(ver);
             }
             cl2.setVerifiche_allievi(list_al);
-            
+
             File checklist = ExportExcel.compileCL2(cl2);
             if (checklist != null) {
                 resp.addProperty("message", "Checklist compilata con successo.");
@@ -623,45 +622,45 @@ public class OperazioniMicro extends HttpServlet {
         } finally {
             e.close();
         }
-        
+
         response.getWriter().write(resp.toString());
         response.getWriter().flush();
         response.getWriter().close();
     }
-    
+
     protected void downloadExcelDocente(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Entity e = new Entity();
         Docenti d = e.getEm().find(Docenti.class, Long.valueOf(request.getParameter("id")));
         e.close();
-        
+
         ByteArrayOutputStream out = lezioniDocente(d);
-        
+
         byte[] encoded = Base64.getEncoder().encode(out.toByteArray());
         out.close();
-        
+
         response.getWriter().write(new String(encoded));
         response.getWriter().flush();
         response.getWriter().close();
     }
-    
+
     protected void downloadTarGz_only(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Entity e = new Entity();
         ProgettiFormativi p = e.getEm().find(ProgettiFormativi.class, Long.valueOf(request.getParameter("id")));
         e.close();
-        
+
         List<ProgettiFormativi> prgs = new ArrayList<>();
         prgs.add(p);
-        
+
         ByteArrayOutputStream out = createTarArchive(prgs);
-        
+
         byte[] encoded = Base64.getEncoder().encode(out.toByteArray());
         out.close();
-        
+
         response.getWriter().write(new String(encoded));
         response.getWriter().flush();
         response.getWriter().close();
     }
-    
+
     protected void downloadTarGz(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Entity e = new Entity();
         e.begin();
@@ -679,10 +678,10 @@ public class OperazioniMicro extends HttpServlet {
             }
             String path = e.getPath("output_excel_archive") + new SimpleDateFormat("yyyyMMdd_HHmmss").format(today) + ".tar.gz";
             createTarArchive(prgs, path);
-            
+
             ObjectMapper mapper = new ObjectMapper();
             e.persist(new Estrazioni(today, mapper.writeValueAsString(cip), path));
-            
+
             for (ProgettiFormativi p : prgs) {
                 p.setExtract(1);
                 e.merge(p);
@@ -701,7 +700,7 @@ public class OperazioniMicro extends HttpServlet {
         response.getWriter().flush();
         response.getWriter().close();
     }
-    
+
     protected void checkPiva(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/plain");
         response.setCharacterEncoding("UTF-8");
@@ -712,7 +711,7 @@ public class OperazioniMicro extends HttpServlet {
         ObjectMapper mapper = new ObjectMapper();
         response.getWriter().write(mapper.writeValueAsString(sa));
     }
-    
+
     protected void checkCF(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/plain");
         response.setCharacterEncoding("UTF-8");
@@ -723,10 +722,10 @@ public class OperazioniMicro extends HttpServlet {
         ObjectMapper mapper = new ObjectMapper();
         response.getWriter().write(mapper.writeValueAsString(sa));
     }
-    
+
     protected void uploadPec(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         JsonObject resp = new JsonObject();
-        
+
         Entity e = new Entity();
         try {
             SoggettiAttuatori sa = e.getEm().find(SoggettiAttuatori.class, Long.valueOf(request.getParameter("idsa")));
@@ -779,12 +778,12 @@ public class OperazioniMicro extends HttpServlet {
         } finally {
             e.close();
         }
-        
+
         response.getWriter().write(resp.toString());
         response.getWriter().flush();
         response.getWriter().close();
     }
-    
+
     protected void uploadDocPregresso(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Entity e = new Entity();
         JsonObject resp = new JsonObject();
@@ -823,7 +822,7 @@ public class OperazioniMicro extends HttpServlet {
         response.getWriter().flush();
         response.getWriter().close();
     }
-    
+
     protected void modifyDocPregresso(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Entity e = new Entity();
         JsonObject resp = new JsonObject();
@@ -847,12 +846,12 @@ public class OperazioniMicro extends HttpServlet {
         response.getWriter().flush();
         response.getWriter().close();
     }
-    
+
     protected void modifyDocIdPregresso(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Entity e = new Entity();
         JsonObject resp = new JsonObject();
         try {
-            
+
             Part p = request.getPart("file");
             Allievi_Pregresso a = e.getEm().find(Allievi_Pregresso.class, Long.valueOf(request.getParameter("id")));
             //creao il path
@@ -886,13 +885,13 @@ public class OperazioniMicro extends HttpServlet {
         response.getWriter().flush();
         response.getWriter().close();
     }
-    
+
     protected void sendAnswer(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/plain");
         response.setCharacterEncoding("UTF-8");
         JsonObject resp = new JsonObject();
         Entity e = new Entity();
-        
+
         try {
             String answer = request.getParameter("text");
             e.begin();
@@ -910,12 +909,12 @@ public class OperazioniMicro extends HttpServlet {
         } finally {
             e.close();
         }
-        
+
         response.getWriter().write(resp.toString());
         response.getWriter().flush();
         response.getWriter().close();
     }
-    
+
     protected void setTipoFaq(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/plain");
         response.setCharacterEncoding("UTF-8");
@@ -936,12 +935,12 @@ public class OperazioniMicro extends HttpServlet {
         } finally {
             e.close();
         }
-        
+
         response.getWriter().write(resp.toString());
         response.getWriter().flush();
         response.getWriter().close();
     }
-    
+
     protected void modifyFaq(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/plain");
         response.setCharacterEncoding("UTF-8");
@@ -963,12 +962,12 @@ public class OperazioniMicro extends HttpServlet {
         } finally {
             e.close();
         }
-        
+
         response.getWriter().write(resp.toString());
         response.getWriter().flush();
         response.getWriter().close();
     }
-    
+
     protected void creaFAD(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/plain");
         response.setCharacterEncoding("UTF-8");
@@ -983,14 +982,14 @@ public class OperazioniMicro extends HttpServlet {
                     ? ""
                     : request.getParameter("note").trim();
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-            
+
             ObjectMapper mapper = new ObjectMapper();
             String pathtemp = e.getPath("pathTemp");
             String mailjet_api = e.getPath("mailjet_api");
             String mailjet_secret = e.getPath("mailjet_secret");
             String link = e.getPath("linkfad");
             String dominio = e.getPath("dominio");
-            
+
             e.begin();
             FadMicro f = new FadMicro();
             f.setNomestanza(nome_fad);
@@ -1004,7 +1003,7 @@ public class OperazioniMicro extends HttpServlet {
             e.persist(f);
             e.flush();
             e.commit();
-            
+
             Email email = e.getEmail("new_conferenza");
             email.setTesto(email.getTesto()
                     .replace("@redirect", dominio + "redirect_out.jsp")
@@ -1016,7 +1015,7 @@ public class OperazioniMicro extends HttpServlet {
                     .replace("@note", note)
                     .replace("@email_tec", e.getPath("emailtecnico"))
                     .replace("@email_am", e.getPath("emailamministrativo")));
-            
+
             for (String s : emails) {
                 SendMailJet.sendMailEvento("Microcredito",
                         new String[]{s},
@@ -1026,7 +1025,7 @@ public class OperazioniMicro extends HttpServlet {
                         SendMailJet.createEVENT(Utility.sdmysql.format(f.getInizio()), Utility.sdmysql.format(f.getFine()), email.getOggetto(), pathtemp),
                         mailjet_api, mailjet_secret);
             }
-            
+
             resp.addProperty("result", true);
             resp.addProperty("pwd", pwd);
             resp.addProperty("id", f.getId());
@@ -1039,12 +1038,12 @@ public class OperazioniMicro extends HttpServlet {
         } finally {
             e.close();
         }
-        
+
         response.getWriter().write(resp.toString());
         response.getWriter().flush();
         response.getWriter().close();
     }
-    
+
     protected void modifyFAD(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/plain");
         response.setCharacterEncoding("UTF-8");
@@ -1055,20 +1054,20 @@ public class OperazioniMicro extends HttpServlet {
             String[] emails = request.getParameterValues("email[]");
             String[] date = request.getParameter("range").split("-");
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-            
+
             ObjectMapper mapper = new ObjectMapper();
             e.begin();
-            
+
             FadMicro f = e.getEm().find(FadMicro.class, Long.valueOf(request.getParameter("idFad")));
             f.setNomestanza(nome_fad);
             f.setPartecipanti(mapper.writeValueAsString(emails));
             f.setInizio(sdf.parse(date[0].trim()));
             f.setFine(sdf.parse(date[1].trim()));
-            
+
             e.merge(f);
             e.flush();
             e.commit();
-            
+
             resp.addProperty("result", true);
         } catch (Exception ex) {
             e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), "OperazioniMicro creaFAD: " + estraiEccezione(ex));
@@ -1077,12 +1076,12 @@ public class OperazioniMicro extends HttpServlet {
         } finally {
             e.close();
         }
-        
+
         response.getWriter().write(resp.toString());
         response.getWriter().flush();
         response.getWriter().close();
     }
-    
+
     protected void closeFAd(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/plain");
         response.setCharacterEncoding("UTF-8");
@@ -1102,12 +1101,12 @@ public class OperazioniMicro extends HttpServlet {
         } finally {
             e.close();
         }
-        
+
         response.getWriter().write(resp.toString());
         response.getWriter().flush();
         response.getWriter().close();
     }
-    
+
     protected void addActivity(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/plain");
         response.setCharacterEncoding("UTF-8");
@@ -1132,12 +1131,12 @@ public class OperazioniMicro extends HttpServlet {
         } finally {
             e.close();
         }
-        
+
         response.getWriter().write(resp.toString());
         response.getWriter().flush();
         response.getWriter().close();
     }
-    
+
     protected void deleteActivity(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/plain");
         response.setCharacterEncoding("UTF-8");
@@ -1160,7 +1159,7 @@ public class OperazioniMicro extends HttpServlet {
         response.getWriter().flush();
         response.getWriter().close();
     }
-    
+
     protected void modifyDocente(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/plain");
         response.setCharacterEncoding("UTF-8");
@@ -1189,7 +1188,7 @@ public class OperazioniMicro extends HttpServlet {
         response.getWriter().flush();
         response.getWriter().close();
     }
-    
+
     protected void updateDateProgetto(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json");
         response.setHeader("Content-Type", "application/json");
@@ -1202,11 +1201,11 @@ public class OperazioniMicro extends HttpServlet {
             ProgettiFormativi p = e.getEm().find(ProgettiFormativi.class, Long.valueOf(request.getParameter("id")));
             p.setStart(sdf.parse(date[0].trim()));
             p.setEnd(sdf.parse(date[1].trim()));
-            
+
             if (p.getEnd_fb() != null) {
                 p.setEnd_fb(p.getEnd());
             }
-            
+
             if (request.getParameter("fb") != null) {
                 try {
                     Date fb = sdf.parse(request.getParameter("fb"));
@@ -1215,7 +1214,7 @@ public class OperazioniMicro extends HttpServlet {
                 } catch (Exception exx1) {
                 }
             }
-            
+
             e.getEm().merge(p);
             e.persist(new Storico_Prg("Date del progetto modificate", new Date(), p, p.getStato()));
             e.commit();
@@ -1231,7 +1230,7 @@ public class OperazioniMicro extends HttpServlet {
         response.getWriter().flush();
         response.getWriter().close();
     }
-    
+
     protected void rendicontaProgetto(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("application/json");
         response.setHeader("Content-Type", "application/json");
@@ -1274,11 +1273,11 @@ public class OperazioniMicro extends HttpServlet {
             } catch (Exception ex2) {
                 Utility.log.severe(estraiEccezione(ex2));
             }
-            
+
             e.persist(new Storico_Prg("Progetto Rendicontato", new Date(), prg, prg.getStato()));
             e.commit();
             resp.addProperty("result", true);
-            
+
         } catch (Exception ex) {
             e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()),
                     "OperazioniMicro rendicontaProgetto: " + estraiEccezione(ex));
@@ -1291,7 +1290,7 @@ public class OperazioniMicro extends HttpServlet {
         response.getWriter().flush();
         response.getWriter().close();
     }
-    
+
     protected void addCpiUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/plain");
         response.setCharacterEncoding("UTF-8");
@@ -1307,17 +1306,17 @@ public class OperazioniMicro extends HttpServlet {
             u.setPassword(Utility.convMd5(pwd));
             u.setTipo(4);
             u.setEmail(em);
-            
+
             e.persist(u);
             e.flush();
-            
+
             CpiUser cu = new CpiUser();
             cu.setId(u);
             cu.setNome(request.getParameter("nome"));
             cu.setCognome(request.getParameter("cognome"));
             cu.setEmail(em);
             cu.setCpi(e.getEm().find(CPI.class, request.getParameter("cpi")));
-            
+
             e.persist(cu);
             e.flush();
             e.commit();
@@ -1334,7 +1333,7 @@ public class OperazioniMicro extends HttpServlet {
                 resp.addProperty("result", false);
                 resp.addProperty("messagge", "Non è stato possibile inviare la mail, contattare l'assistenza per farsi inviare le credenziali.");
             }
-            
+
         } catch (Exception ex) {
             e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()),
                     "OperazioniMicro addCpiUser: " + estraiEccezione(ex));
@@ -1343,14 +1342,14 @@ public class OperazioniMicro extends HttpServlet {
         } finally {
             e.close();
         }
-        
+
         response.getWriter().write(resp.toString());
         response.getWriter().flush();
         response.getWriter().close();
     }
-    
+
     protected void addlez(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
+
         String idpr1 = request.getParameter("idpr1");
         String corso = request.getParameter("corso");
         String orainizio = request.getParameter("orainizio");
@@ -1362,16 +1361,16 @@ public class OperazioniMicro extends HttpServlet {
             orafine = "0" + orafine;
         }
         String datalezione = Utility.formatStringtoStringDate(request.getParameter("datalezione"), patternITA, patternSql, false);
-        
+
         Database db = new Database();
         db.insertcalendarioFAD(idpr1, corso, datalezione, orainizio, orafine);
         db.closeDB();
         Utility.redirect(request, response, "page/mc/fad_calendar.jsp?id=" + idpr1);
-        
+
     }
-    
+
     protected void removelez(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
+
         String idpr1 = request.getParameter("idpr1");
         String corso1 = request.getParameter("corso1");
         String inizio1 = request.getParameter("inizio1");
@@ -1379,17 +1378,17 @@ public class OperazioniMicro extends HttpServlet {
         Database db = new Database();
         db.removecalendarioFAD(idpr1, corso1, inizio1, data1);
         db.closeDB();
-        
+
         Utility.redirect(request, response, "page/mc/fad_calendar.jsp?id=" + idpr1);
-        
+
     }
-    
+
     protected void salvaNoteAllievo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
+
         Entity e = new Entity();
         JsonObject resp = new JsonObject();
         boolean check = true;
-        
+
         try {
             e.begin();
             Allievi a = e.getEm().find(Allievi.class, Long.valueOf(request.getParameter("idallievo")));
@@ -1400,7 +1399,7 @@ public class OperazioniMicro extends HttpServlet {
             e.commit();
             resp.addProperty("result", check);
         } catch (Exception ex) {
-            e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), 
+            e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()),
                     "OperazioniMicro salvaNoteAllievo: " + estraiEccezione(ex));
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato possibile salvare le note allievo.");
@@ -1410,9 +1409,131 @@ public class OperazioniMicro extends HttpServlet {
         response.getWriter().write(resp.toString());
         response.getWriter().flush();
         response.getWriter().close();
-        
+
     }
-    
+
+    protected void sostituisciDocAllievo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/plain");
+        response.setCharacterEncoding("UTF-8");
+        String iddoc = request.getParameter("iddoc");
+        JsonObject resp = new JsonObject();
+        Entity e = new Entity();
+        try {
+            Part part = request.getPart("file");
+            if (part != null && part.getSubmittedFileName() != null && part.getSubmittedFileName().length() > 0) {
+                Documenti_Allievi docprg = e.getEm().find(Documenti_Allievi.class, Long.valueOf(iddoc));
+                if (docprg != null) {
+                    try {
+                        new File(docprg.getPath()).getParentFile().mkdirs();
+                    } catch (Exception ex2) {
+                    }
+
+//                    String destpath = StringUtils.deleteWhitespace(docprg.getPath() + RandomStringUtils.randomAlphabetic(10)
+//                            + part.getSubmittedFileName().substring(part.getSubmittedFileName().lastIndexOf("."))).replaceAll("\\\\", "/");
+                    String destpath = StringUtils.deleteWhitespace("C:\\mnt\\mcn\\test\\" + RandomStringUtils.randomAlphabetic(10)
+                            + part.getSubmittedFileName().substring(part.getSubmittedFileName().lastIndexOf("."))).replaceAll("\\\\", "/");
+                    try {
+                        part.write(destpath);
+                        if (new File(destpath).exists()) {
+                            Database db1 = new Database();
+                            String update = "UPDATE documenti_allievi SET path='" + destpath + "' WHERE iddocumenti_allievi=" + iddoc;
+                            try (Statement st = db1.getC().createStatement()) {
+                                st.executeUpdate(update);
+                            }
+                            db1.closeDB();
+                            resp.addProperty("result", true);
+                        } else {
+                            resp.addProperty("result", false);
+                            resp.addProperty("message", "Errore: file corrotto o non conforme.");
+                        }
+                    } catch (Exception ex1) {
+                        ex1.printStackTrace();
+                        e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()),
+                                "OperazioniMicro sostituisciDocAllievo: " + estraiEccezione(ex1));
+                        resp.addProperty("result", false);
+                        resp.addProperty("message", "Errore: file corrotto o non conforme. ERRORE GENERICO");
+                    }
+                } else {
+                    resp.addProperty("result", false);
+                    resp.addProperty("message", "Errore: documento non trovato.");
+                }
+            } else {
+                resp.addProperty("result", false);
+                resp.addProperty("message", "Errore: file corrotto o non conforme.");
+            }
+        } catch (Exception ex) {
+            e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()),
+                    "OperazioniMicro sostituisciDocAllievo: " + estraiEccezione(ex));
+            resp.addProperty("result", false);
+            resp.addProperty("message", "Errore: file corrotto o non conforme. ERRORE GENERICO");
+        }
+
+        response.getWriter().write(resp.toString());
+        response.getWriter().flush();
+        response.getWriter().close();
+    }
+
+    protected void sostituisciDocProgetto(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/plain");
+        response.setCharacterEncoding("UTF-8");
+        String iddoc = request.getParameter("iddoc");
+        JsonObject resp = new JsonObject();
+        Entity e = new Entity();
+        try {
+            Part part = request.getPart("file");
+            if (part != null && part.getSubmittedFileName() != null && part.getSubmittedFileName().length() > 0) {
+                DocumentiPrg docprg = e.getEm().find(DocumentiPrg.class, Long.valueOf(iddoc));
+                if (docprg != null) {
+                    try {
+                        new File(docprg.getPath()).getParentFile().mkdirs();
+                    } catch (Exception ex2) {
+                    }
+                    String destpath = StringUtils.deleteWhitespace(docprg.getPath() + RandomStringUtils.randomAlphabetic(10)
+                            + part.getSubmittedFileName().substring(part.getSubmittedFileName().lastIndexOf("."))).replaceAll("\\\\", "/");
+//                    String destpath = StringUtils.deleteWhitespace("C:\\mnt\\mcn\\test\\" + RandomStringUtils.randomAlphabetic(10)
+//                            + part.getSubmittedFileName().substring(part.getSubmittedFileName().lastIndexOf("."))).replaceAll("\\\\", "/");
+                    try {
+                        part.write(destpath);
+                        if (new File(destpath).exists()) {
+                            Database db1 = new Database();
+                            String update = "UPDATE documenti_progetti SET path='" + destpath + "' WHERE iddocumenti_progetti=" + iddoc;
+                            try (Statement st = db1.getC().createStatement()) {
+                                st.executeUpdate(update);
+                            }
+                            db1.closeDB();
+                            resp.addProperty("result", true);
+                        } else {
+                            resp.addProperty("result", false);
+                            resp.addProperty("message", "Errore: file corrotto o non conforme.");
+                        }
+                    } catch (Exception ex1) {
+                        ex1.printStackTrace();
+                        e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()),
+                                "OperazioniMicro sostituisciDOcProgetto: " + estraiEccezione(ex1));
+                        resp.addProperty("result", false);
+                        resp.addProperty("message", "Errore: file corrotto o non conforme. ERRORE GENERICO");
+                    }
+                } else {
+                    resp.addProperty("result", false);
+                    resp.addProperty("message", "Errore: documento non trovato.");
+                }
+            } else {
+                resp.addProperty("result", false);
+                resp.addProperty("message", "Errore: file corrotto o non conforme.");
+            }
+        } catch (Exception ex) {
+            e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()),
+                    "OperazioniMicro sostituisciDOcProgetto: " + estraiEccezione(ex));
+            resp.addProperty("result", false);
+            resp.addProperty("message", "Errore: file corrotto o non conforme. ERRORE GENERICO");
+        }
+
+        response.getWriter().write(resp.toString());
+        response.getWriter().flush();
+        response.getWriter().close();
+
+    }
+
     protected void cambiaDocReportFad(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/plain");
         response.setCharacterEncoding("UTF-8");
@@ -1427,23 +1548,23 @@ public class OperazioniMicro extends HttpServlet {
                 List<Documenti_Allievi> list_doc_al = e.getDocAllieviPR(pf);
                 DocumentiPrg registroFADtemp = pf.getDocumenti().stream().filter(d1 -> d1.getTipo().getId() == 30L).findAny().orElse(null);
                 if (registroFADtemp != null) {
-                    
+
                     String destpath = registroFADtemp.getPath() + RandomStringUtils.randomAlphabetic(10)
                             + part.getSubmittedFileName().substring(part.getSubmittedFileName().lastIndexOf("."));
                     part.write(destpath);
                     String base64 = org.apache.commons.codec.binary.Base64.encodeBase64String(FileUtils.readFileToByteArray(new File(destpath)));
-                    
+
                     if (base64 != null) {
                         Database db1 = new Database();
                         String base64or = db1.getBase64Report(Integer.parseInt(idpr));
                         if (base64or == null) {
                             String insert = "INSERT INTO fad_report (idprogetti_formativi,base64,definitivo) VALUES (" + idpr + ",'" + base64 + "','Y')";
-                            try ( Statement st = db1.getC().createStatement()) {
+                            try (Statement st = db1.getC().createStatement()) {
                                 st.execute(insert);
                             }
                         } else {
                             String update = "UPDATE fad_report SET base64='" + base64 + "' WHERE idprogetti_formativi=" + idpr;
-                            try ( Statement st = db1.getC().createStatement()) {
+                            try (Statement st = db1.getC().createStatement()) {
                                 st.executeUpdate(update);
                             }
                         }
@@ -1452,42 +1573,62 @@ public class OperazioniMicro extends HttpServlet {
 
                         //leggifile e impostaregistro
                         ExportExcel.impostaregistri(base64, pf.getAllievi(), calendarioFAD, list_doc_pr, list_doc_al);
-                        
+
                         resp.addProperty("result", true);
                     } else {
                         resp.addProperty("result", false);
                         resp.addProperty("message", "Errore: file corrotto o non conforme.");
                     }
-                    
+
                 } else {
                     resp.addProperty("result", false);
                     resp.addProperty("message", "Errore: registro temporaneo non trovato.");
                 }
-                
+
             } else {
                 resp.addProperty("result", false);
                 resp.addProperty("message", "Errore: file corrotto o non conforme.");
             }
-            
+
         } catch (Exception ex) {
-            e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()), 
+            e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()),
                     "OperazioniMicro caricaregistroFAD: " + estraiEccezione(ex));
             resp.addProperty("result", false);
             resp.addProperty("message", "Errore: non &egrave; stato possibile caricare il registro FAD.");
         }
-        
+
         response.getWriter().write(resp.toString());
         response.getWriter().flush();
         response.getWriter().close();
     }
-    
+
+    protected void rigenerareportfad(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/plain");
+        response.setCharacterEncoding("UTF-8");
+        JsonObject resp = new JsonObject();
+
+        String idpr = request.getParameter("idpr");
+
+        File report_temp = generatereportFAD_multistanza(idpr, false);
+
+        if (report_temp.exists() && report_temp.canRead() && report_temp.length() > 0) {
+            resp.addProperty("result", true);
+        } else {
+            resp.addProperty("result", false);
+            resp.addProperty("message", "Errore: non &egrave; stato possibile rigenerare il registro FAD.");
+        }
+        response.getWriter().write(resp.toString());
+        response.getWriter().flush();
+        response.getWriter().close();
+    }
+
     protected void compilaeimporto(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //29-04-2020 MODIFICA - TOGLIERE IMPORTO CHECKLIST
         Entity e = new Entity();
         e.begin();
         String idpr = request.getParameter("idprogetto");
         try {
-            
+
             String prezzo = request.getParameter("kt_inputmask_7");
             while (prezzo.length() < 2) {
                 prezzo = "0" + prezzo;
@@ -1499,7 +1640,7 @@ public class OperazioniMicro extends HttpServlet {
             } else {
                 prezzo = "0." + prezzo;
             }
-            
+
             ProgettiFormativi prg = e.getEm().find(ProgettiFormativi.class, Long.valueOf(idpr));
             prg.setImporto(Double.parseDouble(prezzo));
             e.merge(prg);
@@ -1511,9 +1652,9 @@ public class OperazioniMicro extends HttpServlet {
                     "OperazioniMicro caricaregistroFAD: " + estraiEccezione(ex));
             redirect(request, response, "page/mc/uploadCL.jsp?id=" + idpr);
         }
-        
+
     }
-    
+
     protected void liquidaPrg(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/plain");
         response.setCharacterEncoding("UTF-8");
@@ -1539,12 +1680,12 @@ public class OperazioniMicro extends HttpServlet {
         } finally {
             e.close();
         }
-        
+
         response.getWriter().write(resp.toString());
         response.getWriter().flush();
         response.getWriter().close();
     }
-    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -1552,131 +1693,96 @@ public class OperazioniMicro extends HttpServlet {
         if (us != null && us.getTipo() == 2) {
             String type = request.getParameter("type");
             switch (type) {
-                case "addlez":
+                case "addlez" ->
                     addlez(request, response);
-                    break;
-                case "removelez":
+                case "removelez" ->
                     removelez(request, response);
-                    break;
-                case "setProtocollo":
+                case "setProtocollo" ->
                     setProtocollo(request, response);
-                    break;
-                case "addDocente":
+                case "addDocente" ->
                     addDocente(request, response);
-                    break;
-                case "addDocenteFile":
+                case "addDocenteFile" ->
                     addDocenteFile(request, response);
-                    break;
-                case "addAuleFile":
+                case "addAuleFile" ->
                     addAuleFile(request, response);
-                    break;
-                case "addAula":
+                case "addAula" ->
                     addAula(request, response);
-                    break;
-                case "validatePrg":
+                case "validatePrg" ->
                     validatePrg(request, response);
-                    break;
-                case "rejectPrg":
+                case "rejectPrg" ->
                     rejectPrg(request, response);
-                    break;
-                case "annullaPrg":
+                case "annullaPrg" ->
                     annullaPrg(request, response);
-                    break;
-                case "eliminaDocente":
+                case "eliminaDocente" ->
                     eliminaDocente(request, response);
-                    break;
-                case "validateHourRegistroAula":
+                case "validateHourRegistroAula" ->
                     validateHourRegistroAula(request, response);
-                    break;
-                case "setHoursRegistro":
+                case "setHoursRegistro" ->
                     setHoursRegistro(request, response);
-                    break;
-                case "modifyDoc":
+                case "modifyDoc" ->
                     modifyDoc(request, response);
-                    break;
-                case "uploadDocPrg":
+                case "uploadDocPrg" ->
                     uploadDocPrg(request, response);
-                    break;
-                case "compileCL2":
+                case "compileCL2" ->
                     compileCL2(request, response);
-                    break;
-                case "downloadExcelDocente":
+                case "downloadExcelDocente" ->
                     downloadExcelDocente(request, response);
-                    break;
-                case "downloadTarGz_only":
+                case "downloadTarGz_only" ->
                     downloadTarGz_only(request, response);
-                    break;
-                case "downloadTarGz":
+                case "downloadTarGz" ->
                     downloadTarGz(request, response);
-                    break;
-                case "checkPiva":
+                case "checkPiva" ->
                     checkPiva(request, response);
-                    break;
-                case "checkCF":
+                case "checkCF" ->
                     checkCF(request, response);
-                    break;
-                case "uploadPec":
+                case "uploadPec" ->
                     uploadPec(request, response);
-                    break;
-                case "uploadDocPregresso":
+                case "uploadDocPregresso" ->
                     uploadDocPregresso(request, response);
-                    break;
-                case "modifyDocPregresso":
+                case "modifyDocPregresso" ->
                     modifyDocPregresso(request, response);
-                    break;
-                case "modifyDocIdPregresso":
+                case "modifyDocIdPregresso" ->
                     modifyDocIdPregresso(request, response);
-                    break;
-                case "sendAnswer":
+                case "sendAnswer" ->
                     sendAnswer(request, response);
-                    break;
-                case "setTipoFaq":
+                case "setTipoFaq" ->
                     setTipoFaq(request, response);
-                    break;
-                case "modifyFaq":
+                case "modifyFaq" ->
                     modifyFaq(request, response);
-                    break;
-                case "creaFAD":
+                case "creaFAD" ->
                     creaFAD(request, response);
-                    break;
-                case "closeFAd":
+                case "closeFAd" ->
                     closeFAd(request, response);
-                    break;
-                case "addActivity":
+                case "addActivity" ->
                     addActivity(request, response);
-                    break;
-                case "deleteActivity":
+                case "deleteActivity" ->
                     deleteActivity(request, response);
-                    break;
-                case "modifyDocente":
+                case "modifyDocente" ->
                     modifyDocente(request, response);
-                    break;
-                case "updateDateProgetto":
+                case "updateDateProgetto" ->
                     updateDateProgetto(request, response);
-                    break;
-                case "rendicontaProgetto":
+                case "rendicontaProgetto" ->
                     rendicontaProgetto(request, response);
-                    break;
-                case "modifyFAD":
+                case "modifyFAD" ->
                     modifyFAD(request, response);
-                    break;
-                case "addCpiUser":
+                case "addCpiUser" ->
                     addCpiUser(request, response);
-                    break;
-                case "liquidaPrg":
+                case "liquidaPrg" ->
                     liquidaPrg(request, response);
-                    break;
-                case "salvaNoteAllievo":
+                case "salvaNoteAllievo" ->
                     salvaNoteAllievo(request, response);
-                    break;
-                case "cambiaDocReportFad":
+                case "cambiaDocReportFad" ->
                     cambiaDocReportFad(request, response);
-                    break;
-                case "compilaeimporto":
+                case "sostituisciDocProgetto" ->
+                    sostituisciDocProgetto(request, response);
+                case "sostituisciDocAllievo" ->
+                    sostituisciDocAllievo(request, response);
+                case "compilaeimporto" ->
                     compilaeimporto(request, response);
-                    break;
-                default:
-                    break;
+                case "rigenerareportfad" ->
+                    rigenerareportfad(request, response);
+                default -> {
+                }
             }
         }
     }
@@ -1690,7 +1796,7 @@ public class OperazioniMicro extends HttpServlet {
         }
         return true;
     }
-    
+
     private boolean checkValidateRegisterAllievo(List<Documenti_Allievi> doc) {
         for (Documenti_Allievi d : doc) {
             if (d.getOrericonosciute() == null) {
@@ -1699,7 +1805,7 @@ public class OperazioniMicro extends HttpServlet {
         }
         return true;
     }
-    
+
     private double getRandomNumber(int min, int max) {
         return ((Math.random() * (max - min)) + min);
     }

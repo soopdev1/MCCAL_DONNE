@@ -462,5 +462,21 @@ public class Database {
         }
         return out;
     }
+    
+    public String getSAPR_F(String id) {
+        String p1 = "0";
+        try {
+            String sql = "SELECT idsoggetti_attuatori FROM progetti_formativi WHERE idprogetti_formativi = ?";
+            PreparedStatement ps = this.c.prepareStatement(sql);
+            ps.setString(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                p1 = rs.getString(1);
+            }
+        } catch (Exception ex) {
+            log.severe(estraiEccezione(ex));
+        }
+        return p1;
+    }
 
 }

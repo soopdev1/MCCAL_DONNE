@@ -23,6 +23,7 @@
             Entity e = new Entity();
             List<SoggettiAttuatori> sa_list = e.findAll(SoggettiAttuatori.class);
             List<StatiPrg> stati = e.getStatiPrg();
+            String usersupdate = e.getPath("users.update");
             e.close();
             String src = session.getAttribute("src").toString();
             String istato = request.getParameter("tipo") != null ? request.getParameter("tipo") : "";
@@ -329,7 +330,11 @@
         <script src="<%=src%>/assets/vendors/general/bootstrap-datepicker/dist/js/bootstrap-datepicker.js" type="text/javascript"></script>
         <script src="<%=src%>/assets/vendors/general/inputmask/dist/inputmask/inputmask.js" type="text/javascript"></script>
         <script src="<%=src%>/assets/vendors/general/inputmask/dist/inputmask/jquery.inputmask.js" type="text/javascript"></script>
-        <script id="searchPFMicro" src="<%=src%>/page/mc/js/searchPFMicro.js<%=no_cache%>" data-context="<%=request.getContextPath()%>" type="text/javascript"></script>
+        <script id="searchPFMicro" src="<%=src%>/page/mc/js/searchPFMicro.js<%=no_cache%>" 
+        data-context="<%=request.getContextPath()%>" 
+        data-users="<%=usersupdate%>" 
+        data-name="<%=us.getUsername()%>"
+        type="text/javascript"></script>
         <script type="text/javascript">
                                                                         var KTAppOptions = {
                                                                             "colors": {

@@ -65,7 +65,7 @@ public class ExportExcel {
     public static ByteArrayOutputStream lezioniDocente(Docenti docente) {
         try {
             ByteArrayOutputStream out = new ByteArrayOutputStream();
-            try ( Workbook workbook = new XSSFWorkbook()) {
+            try (Workbook workbook = new XSSFWorkbook()) {
                 Sheet sheet = workbook.createSheet("Lezioni");
                 SimpleDateFormat sdfH = new SimpleDateFormat("HH:mm");
                 CreationHelper createHelper = workbook.getCreationHelper();
@@ -74,11 +74,14 @@ public class ExportExcel {
                 colonna = 0;
                 int riga = 0;
                 Row row = sheet.createRow(riga);
-                writeCell(row, "Data");
-                writeCell(row, "Inizio");
-                writeCell(row, "Fine");
-                writeCell(row, "Cip");
-                writeCell(row, "Alunno");
+                writeCell(row, "DATA");
+                writeCell(row, "ORA INIZIO");
+                writeCell(row, "ORA FINE");
+                writeCell(row, "SOGGETTO ATTUATORE");
+                writeCell(row, "ID CORSO");
+                writeCell(row, "CIP CORSO");
+                writeCell(row, "ALUNNO");
+
                 for (DocumentiPrg d : docente.getRegistri_aula()) {
                     if (d.getGiorno() != null) {
                         colonna = 0;
@@ -87,6 +90,8 @@ public class ExportExcel {
                         writeCell(row, d.getGiorno(), celldata);
                         writeCell(row, sdfH.format(d.getOrariostart()));
                         writeCell(row, sdfH.format(d.getOrarioend()));
+                        writeCell(row, d.getProgetto().getSoggetto().getRagionesociale());
+                        writeCell(row, String.valueOf(d.getProgetto().getId()));
                         writeCell(row, d.getProgetto().getCip());
                     }
                 }
@@ -97,6 +102,8 @@ public class ExportExcel {
                     writeCell(row, d.getGiorno(), celldata);
                     writeCell(row, sdfH.format(d.getOrariostart_mattina()));
                     writeCell(row, sdfH.format(d.getOrarioend_mattina()));
+                    writeCell(row, d.getAllievo().getProgetto().getSoggetto().getRagionesociale());
+                    writeCell(row, String.valueOf(d.getAllievo().getProgetto().getId()));
                     writeCell(row, d.getAllievo().getProgetto().getCip());
                     writeCell(row, d.getAllievo().getCognome() + " " + d.getAllievo().getNome());
                     if (d.getOrariostart_pom() != null) {
@@ -106,6 +113,8 @@ public class ExportExcel {
                         writeCell(row, d.getGiorno(), celldata);
                         writeCell(row, sdfH.format(d.getOrariostart_pom()));
                         writeCell(row, sdfH.format(d.getOrarioend_pom()));
+                        writeCell(row, d.getAllievo().getProgetto().getSoggetto().getRagionesociale());
+                        writeCell(row, String.valueOf(d.getAllievo().getProgetto().getId()));
                         writeCell(row, d.getAllievo().getProgetto().getCip());
                         writeCell(row, d.getAllievo().getCognome() + " " + d.getAllievo().getNome());
                     }
@@ -136,7 +145,7 @@ public class ExportExcel {
         try {
             File out_file = new File(output_name);
             FileInputStream inputStream = new FileInputStream(template);
-            try ( FileOutputStream out = new FileOutputStream(out_file)) {
+            try (FileOutputStream out = new FileOutputStream(out_file)) {
                 Workbook workbook = WorkbookFactory.create(inputStream);
                 Sheet sheet = workbook.getSheetAt(0);
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -236,7 +245,7 @@ public class ExportExcel {
 
             File out_file = new File(output_name);
             FileInputStream inputStream = new FileInputStream(template);
-            try ( FileOutputStream out = new FileOutputStream(out_file)) {
+            try (FileOutputStream out = new FileOutputStream(out_file)) {
                 Workbook workbook = WorkbookFactory.create(inputStream);
                 Sheet sheet = workbook.getSheetAt(0);
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -280,7 +289,7 @@ public class ExportExcel {
                     writeCell(row, a.getCondizione_mercato().getId());
                     writeCell(row, sdf.format(a.getData_up()));
                     writeCell(row, sdf.format(a.getIscrizionegg()));
-                   // writeCell(row, a.getCpi().getDescrizione());
+                    // writeCell(row, a.getCpi().getDescrizione());
                     writeCell(row, String.valueOf(calcolaEta(a.getDatanascita())));
                     writeCell(row, p.getSoggetto().getRagionesociale());
                     writeCell(row, p.getCip());
@@ -359,7 +368,7 @@ public class ExportExcel {
             SimpleDateFormat sdf_time = new SimpleDateFormat("HH:mm");
             sdf_time.setTimeZone(TimeZone.getTimeZone("CET"));//per fixare l'ora dei presenti
 
-            try ( XSSFWorkbook wb = new XSSFWorkbook(new ByteArrayInputStream(Base64.decodeBase64(base64)))) {
+            try (XSSFWorkbook wb = new XSSFWorkbook(new ByteArrayInputStream(Base64.decodeBase64(base64)))) {
                 int max_sheet = wb.getNumberOfSheets();
                 for (int i = 0; i < max_sheet; i++) {
                     int numerogruppo = i + 1;

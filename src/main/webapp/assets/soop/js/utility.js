@@ -294,6 +294,96 @@ function check_PIVA_CF(input) {
     }
 }
 
+function checkCF_ALL(cf) {
+    var codicefiscale = cf.val();
+    var esito = true;
+    var validi, i, s, set1, set2, setpari, setdisp;
+    if (codicefiscale === '')
+        esito = false;
+    codicefiscale = codicefiscale.toUpperCase();
+    if (codicefiscale.length === 16) {
+        if (codicefiscale.length !== 16) {
+            esito = false;
+        } else {
+            validi = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            for (i = 0; i < 16; i++) {
+                if (validi.indexOf(codicefiscale.charAt(i)) === -1) {
+                    esito = false;
+                }
+            }
+            set1 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            set2 = "ABCDEFGHIJABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            setpari = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            setdisp = "BAKPLCQDREVOSFTGUHMINJWZYX";
+            s = 0;
+            for (i = 1; i <= 13; i += 2) {
+                s += setpari.indexOf(set2.charAt(set1.indexOf(codicefiscale.charAt(i))));
+            }
+            for (i = 0; i <= 14; i += 2) {
+                s += setdisp.indexOf(set2.charAt(set1.indexOf(codicefiscale.charAt(i))));
+            }
+
+            if (s % 26 !== codicefiscale.charCodeAt(15) - 'A'.charCodeAt(0)) {
+                esito = false;
+            }
+            if (esito) {
+                cf.attr("class", "form-control is-valid");
+            } else {
+                cf.attr("class", "form-control is-invalid");
+            }
+            return esito;
+        }
+    } else {
+        cf.attr("class", "form-control is-invalid");
+        return false;
+    }
+}
+
+function checkCFGENERAL(cf) {
+    var codicefiscale = cf.val();
+    var esito = true;
+    var validi, i, s, set1, set2, setpari, setdisp;
+    if (codicefiscale === '')
+        esito = false;
+    codicefiscale = codicefiscale.toUpperCase();
+    if (codicefiscale.length === 16) {
+        if (codicefiscale.length !== 16) {
+            esito = false;
+        } else {
+            validi = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            for (i = 0; i < 16; i++) {
+                if (validi.indexOf(codicefiscale.charAt(i)) === -1) {
+                    esito = false;
+                }
+            }
+            set1 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            set2 = "ABCDEFGHIJABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            setpari = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            setdisp = "BAKPLCQDREVOSFTGUHMINJWZYX";
+            s = 0;
+            for (i = 1; i <= 13; i += 2) {
+                s += setpari.indexOf(set2.charAt(set1.indexOf(codicefiscale.charAt(i))));
+            }
+            for (i = 0; i <= 14; i += 2) {
+                s += setdisp.indexOf(set2.charAt(set1.indexOf(codicefiscale.charAt(i))));
+            }
+
+            if (s % 26 !== codicefiscale.charCodeAt(15) - 'A'.charCodeAt(0)) {
+                esito = false;
+            }
+            if (esito) {
+                cf.attr("class", "form-control is-valid");
+            } else {
+                cf.attr("class", "form-control is-invalid");
+            }
+            return esito;
+        }
+    } else {
+        cf.attr("class", "form-control is-invalid");
+        return false;
+    }
+}
+
 function checkCF(cf) {
     var codicefiscale = cf.val();
     var esito = true;
@@ -503,7 +593,7 @@ function showLoad(title) {
         title: title,
         text: '',
         onOpen: function () {
-            swal.showLoading()
+            swal.showLoading();
         },
         customClass: {
             container: 'my-swal',
@@ -617,7 +707,7 @@ function swalWarning(title, message) {
         "type": "warning",
         cancelButtonClass: "btn btn-io-n",
         customClass: {
-            container: 'my-swal',
+            container: 'my-swal'
         }
     });
 }

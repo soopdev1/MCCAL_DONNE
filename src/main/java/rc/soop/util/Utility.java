@@ -26,6 +26,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.GregorianCalendar;
@@ -80,6 +81,7 @@ public class Utility {
     public static boolean pregresso = false;
     public static final String patternSql = "yyyy-MM-dd";
     public static final String patternITA = "dd/MM/yyyy";
+    public static final SimpleDateFormat sdita = new SimpleDateFormat(patternITA);
     public static final SimpleDateFormat sdmysql = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     //END RAF
@@ -389,4 +391,26 @@ public class Utility {
     public static final String timestampSQL = "yyyy-MM-dd HH:mm:ss";
     public static final String timestampITA = "dd/MM/yyyy HH:mm:ss";
 
+    public static List orderList(List list, String c1) {
+        switch (c1) {
+            case "DocumentiPrg" -> {
+                List<DocumentiPrg> li = (List<DocumentiPrg>) list;
+                li.sort(Comparator.comparing(a -> a.getTipo().getDescrizione()));
+                return li;
+            }
+            case "Allievi" -> {
+                List<Allievi> li = (List<Allievi>) list;
+                li.sort(Comparator.comparing(a -> a.getCognome()));
+                return li;
+            }
+            case "Documenti_Allievi" -> {
+                List<Documenti_Allievi> li = (List<Documenti_Allievi>) list;
+                li.sort(Comparator.comparing(a -> a.getTipo().getDescrizione()));
+                return li;
+            }
+            default -> {
+            }
+        }
+        return list;
+    }
 }

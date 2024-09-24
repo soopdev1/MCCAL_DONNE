@@ -196,7 +196,7 @@
             function ctrlForm() {
                 var err = false;
                 err = checkObblFieldsContent($('#kt_form')) ? true : err;
-                err = !checkCF($('#cf')) ? true : err;
+                err = !checkCFGENERAL($('#cf')) ? true : err;
                 err = checkEmail($('#email')) ? true : err;
                 return !err;
             }

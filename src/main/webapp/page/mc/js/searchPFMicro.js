@@ -2,6 +2,8 @@
 /* global getHtml, calculateHoursRegistro, formattedTime, KTUtil */
 
 var context = document.getElementById("searchPFMicro").getAttribute("data-context");
+var userslist = document.getElementById("searchPFMicro").getAttribute("data-users");
+var name = document.getElementById("searchPFMicro").getAttribute("data-name");
 
 $.getScript(context + '/page/partialView/partialView.js', function () {});
 
@@ -90,6 +92,10 @@ var KTDatatablesDataSourceAjaxServer = function () {
                                 + '</button>'
                                 + '<div class="dropdown-menu dropdown-menu-left">';
 
+                        if (userslist === null || userslist === "null" || userslist.includes(name)) {
+                            option += '<a class="dropdown-item" target="_blank" href="edit_doc.jsp?id=' + row.id + '"><i class="fa fa-edit"></i> Sostituisci DOC</a>';
+                        }
+
                         option += '<a class="dropdown-item" href="javascript:void(0);" onclick="modifyDate(' + row.id + ',' + row.start + ',' + row.end + ',' + row.end_fa + ')"><i class="fa fa-calendar-alt"></i> Modifica Date</a>';
                         option += '<a class="dropdown-item" href="javascript:void(0);" onclick="swalTableAllievi(' + row.id + ')"><i class="flaticon-users-1"></i> Visualizza Allievi</a>';
                         option += '<a class="dropdown-item" href="javascript:void(0);" onclick="swalTableDocenti(' + row.id + ')"><i class="fa fa-chalkboard-teacher"></i> Visualizza Docenti</a>';
@@ -99,21 +105,21 @@ var KTDatatablesDataSourceAjaxServer = function () {
                             option += '<a class="dropdown-item fancyBoxAntoRef" href="checkList2.jsp?id=' + row.id + '" ><i class="fa fa-file-excel"></i> Compila Checklist 2</a>';
                             option += '<a class="dropdown-item fancyBoxAntoRef" href="uploadCL.jsp?id=' + row.id + '" ><i class="fa fa-file-upload"></i> Modifica/Carica Checklist</a>';
                         }
-                        
+
                         if (row.stato.id === "FA") {
                             option += '<a class="dropdown-item fancyBoxAntoRef" href="uploadCL.jsp?id=' + row.id + '" ><i class="fa fa-file-upload"></i> Modifica/Carica Documenti</a>';
                         }
-                        
+
                         if (row.stato.controllare === 1) {
                             option += '<a class="dropdown-item kt-font-success" href="javascript:void(0);" onclick="valitdatePrg(' + row.id
                                     + ',&quot;' + row.stato.id + '&quot;,&quot;' + row.misto + '&quot;)"><i class="fa fa-check kt-font-success" style="margin-top:-2px"></i>Convalida Progetto</a>';
                             option += '<a class="dropdown-item kt-font-danger" href="javascript:void(0);" onclick="rejectPrg(' + row.id + ')"><i class="flaticon2-delete kt-font-danger" style="margin-top:-2px"></i>Segnala Progetto</a>';
                         }
-                        
+
                         if (row.archiviabile === 1) {
                             option += '<a class="dropdown-item kt-font-success" href="javascript:void(0);" onclick="confirmNext(' + row.id + ',\'' + row.stato.id + '\')">Archivia Progetto&nbsp;<i class="fa fa-angle-double-right kt-font-success" style="margin-top:-2px"></i></a>';
                         }
-                        
+
                         if (row.stato.id === "AR") {
                             option += '<a class="dropdown-item" href="javascript:void(0);" onclick="downloadArchive(' + row.id + ',\'' + row.cip + '\')"><i class="fa fa-file-archive" style="margin-top:-2px"></i> Scarica Pacchetto Files</a>';
                             if (row.rendicontato === 0) {
@@ -1156,7 +1162,7 @@ function liquida_old(id) {
         title: '<h2 class="kt-font-io-n"><b>Liquida Progetto</b></h2><br>',
         html: html,
         animation: false,
-        width:'50%',
+        width: '50%',
         showCancelButton: true,
         confirmButtonText: '&nbsp;<i class="la la-check"></i>',
         cancelButtonText: '&nbsp;<i class="la la-close"></i>',

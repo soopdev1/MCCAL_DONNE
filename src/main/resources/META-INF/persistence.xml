@@ -2,44 +2,6 @@
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
   <persistence-unit name="microcredito" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-    <class>rc.soop.entity.User_monitoring</class>
-    <class>rc.soop.domain.Allievi_Pregresso</class>
-    <class>rc.soop.domain.Documenti_Allievi</class>
-    <class>rc.soop.domain.Selfiemployment_Prestiti</class>
-    <class>rc.soop.domain.ModificheStatoPrg</class>
-    <class>rc.soop.domain.StatoPartecipazione</class>
-    <class>rc.soop.domain.ProgettiFormativi</class>
-    <class>rc.soop.domain.Email</class>
-    <class>rc.soop.domain.Comuni</class>
-    <class>rc.soop.domain.CpiUser</class>
-    <class>rc.soop.domain.DocumentiPrg</class>
-    <class>rc.soop.domain.StatiPrg</class>
-    <class>rc.soop.domain.Tracking</class>
-    <class>rc.soop.domain.CPI</class>
-    <class>rc.soop.domain.Pagina</class>
-    <class>rc.soop.domain.Allievi</class>
-    <class>rc.soop.domain.SoggettiAttuatori</class>
-    <class>rc.soop.domain.Cad</class>
-    <class>rc.soop.domain.EstensioniFile</class>
-    <class>rc.soop.domain.Path</class>
-    <class>rc.soop.domain.Faq</class>
-    <class>rc.soop.domain.FasceDocenti</class>
-    <class>rc.soop.domain.Cloud</class>
-    <class>rc.soop.domain.TipoDoc</class>
-    <class>rc.soop.domain.Attivita</class>
-    <class>rc.soop.domain.Storico_ModificheInfo</class>
-    <class>rc.soop.domain.Docenti</class>
-    <class>rc.soop.domain.Storico_Prg</class>
-    <class>rc.soop.domain.ComuniCoord</class>
-    <class>rc.soop.domain.NomiProgetto</class>
-    <class>rc.soop.domain.TipoFaq</class>
-    <class>rc.soop.domain.TipoDoc_Allievi</class>
-    <class>rc.soop.domain.Estrazioni</class>
-    <class>rc.soop.domain.User</class>
-    <class>rc.soop.domain.TitoliStudio</class>
-    <class>rc.soop.domain.Condizione_Mercato</class>
-    <class>rc.soop.domain.Condizione_Lavorativa</class>
-    <class>rc.soop.domain.SediFormazione</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="eclipselink.logging.level" value="SEVERE"/>
