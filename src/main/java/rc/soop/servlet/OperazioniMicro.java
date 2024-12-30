@@ -77,6 +77,7 @@ import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
 import static rc.soop.util.ExcelFAD.generatereportFAD_multistanza;
 
 /**
@@ -1412,6 +1413,71 @@ public class OperazioniMicro extends HttpServlet {
 
     }
 
+    protected void sostituisciDocIdAllievo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("text/plain");
+        response.setCharacterEncoding("UTF-8");
+        String idallievo = request.getParameter("iddoc");
+        JsonObject resp = new JsonObject();
+        Entity e = new Entity();
+        String scadenza = new DateTime().plusYears(10).toString(patternSql);
+        
+        try {
+            Part part = request.getPart("file");
+            if (part != null && part.getSubmittedFileName() != null && part.getSubmittedFileName().length() > 0) {
+                Allievi a1 = e.getEm().find(Allievi.class, Long.valueOf(idallievo));
+                if (a1 != null) {
+                    try {
+                        new File(a1.getDocid()).getParentFile().mkdirs();
+                    } catch (Exception ex2) {
+                    }
+
+                    String destpath = StringUtils.deleteWhitespace(a1.getDocid() + RandomStringUtils.randomAlphabetic(10)
+                            + part.getSubmittedFileName().substring(part.getSubmittedFileName().lastIndexOf("."))).replaceAll("\\\\", "/");
+//                    String destpath = StringUtils.deleteWhitespace("C:\\mnt\\mcn\\test\\" + RandomStringUtils.randomAlphabetic(10)
+//                            + part.getSubmittedFileName().substring(part.getSubmittedFileName().lastIndexOf("."))).replaceAll("\\\\", "/");
+                    try {
+                        part.write(destpath);
+                        if (new File(destpath).exists()) {
+                            Database db1 = new Database();
+                            String update = "UPDATE allievi SET docid='" + destpath + "', scadenzadocid = '"+scadenza+"' WHERE idallievi=" + idallievo;
+                            try (Statement st = db1.getC().createStatement()) {
+                                st.executeUpdate(update);
+                            }
+                            db1.closeDB();
+                            resp.addProperty("result", true);
+                        } else {
+                            resp.addProperty("result", false);
+                            resp.addProperty("message", "Errore: file corrotto o non conforme.");
+                        }
+                    } catch (Exception ex1) {
+                        ex1.printStackTrace();
+                        e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()),
+                                "OperazioniMicro sostituisciDocAllievo: " + estraiEccezione(ex1));
+                        resp.addProperty("result", false);
+                        resp.addProperty("message", "Errore: file corrotto o non conforme. ERRORE GENERICO");
+                    }
+                } else {
+                    resp.addProperty("result", false);
+                    resp.addProperty("message", "Errore: documento non trovato.");
+                }
+            } else {
+                resp.addProperty("result", false);
+                resp.addProperty("message", "Errore: file corrotto o non conforme.");
+            }
+        } catch (Exception ex) {
+            e.insertTracking(String.valueOf(((User) request.getSession().getAttribute("user")).getId()),
+                    "OperazioniMicro sostituisciDocAllievo: " + estraiEccezione(ex));
+            resp.addProperty("result", false);
+            resp.addProperty("message", "Errore: file corrotto o non conforme. ERRORE GENERICO");
+        }
+
+        response.getWriter().write(resp.toString());
+        response.getWriter().flush();
+        response.getWriter().close();
+        
+        
+    }
+    
     protected void sostituisciDocAllievo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/plain");
         response.setCharacterEncoding("UTF-8");
@@ -1428,10 +1494,10 @@ public class OperazioniMicro extends HttpServlet {
                     } catch (Exception ex2) {
                     }
 
-//                    String destpath = StringUtils.deleteWhitespace(docprg.getPath() + RandomStringUtils.randomAlphabetic(10)
-//                            + part.getSubmittedFileName().substring(part.getSubmittedFileName().lastIndexOf("."))).replaceAll("\\\\", "/");
-                    String destpath = StringUtils.deleteWhitespace("C:\\mnt\\mcn\\test\\" + RandomStringUtils.randomAlphabetic(10)
+                    String destpath = StringUtils.deleteWhitespace(docprg.getPath() + RandomStringUtils.randomAlphabetic(10)
                             + part.getSubmittedFileName().substring(part.getSubmittedFileName().lastIndexOf("."))).replaceAll("\\\\", "/");
+//                    String destpath = StringUtils.deleteWhitespace("C:\\mnt\\mcn\\test\\" + RandomStringUtils.randomAlphabetic(10)
+//                            + part.getSubmittedFileName().substring(part.getSubmittedFileName().lastIndexOf("."))).replaceAll("\\\\", "/");
                     try {
                         part.write(destpath);
                         if (new File(destpath).exists()) {
@@ -1777,6 +1843,8 @@ public class OperazioniMicro extends HttpServlet {
                     sostituisciDocProgetto(request, response);
                 case "sostituisciDocAllievo" ->
                     sostituisciDocAllievo(request, response);
+                case "sostituisciDocIdAllievo" ->
+                    sostituisciDocIdAllievo(request, response);
                 case "compilaeimporto" ->
                     compilaeimporto(request, response);
                 case "rigenerareportfad" ->

@@ -193,7 +193,29 @@
 
                                                         <%
                                                             for (Allievi a1 : elencoallievi) {
-
+                                                            
+                                                            %>
+                                                            <tr>
+                                                            <th scope="row">DR_<%=a1.getId()%></th>
+                                                            <td scope="row"><%=a1.getCognome().toUpperCase().trim()%> <%=a1.getNome().toUpperCase().trim()%> (<%=a1.getCodicefiscale().toUpperCase().trim()%>)</td>
+                                                            <td scope="row">DOCUMENTO DI RICONOSCIMENTO</td>
+                                                            <td>
+                                                                <button type="button" class="btn btn-sm btn-outline-success"
+                                                                        onclick="return document.getElementById('DOCALL_RIC_<%=a1.getId()%>').submit()">
+                                                                    <i class="fa fa-download"></i> Scarica
+                                                                </button>
+                                                                <button type="button" class="btn btn-sm btn-outline-info" 
+                                                                        onclick="return sost_docprg('<%=a1.getId()%>', 'pdf', 'application/pdf', 3);">
+                                                                    <i class="fa fa-upload"></i> Sostituisci
+                                                                </button>
+                                                                <form action="<%=src%>/OperazioniGeneral" method="post" target="_blank" id="DOCALL_RIC_<%=a1.getId()%>">
+                                                                    <input type="hidden" name="type" value="showDoc" />
+                                                                    <input type="hidden" name="path" value="<%=a1.getDocid()%>" />
+                                                                </form>
+                                                            </td>
+                                                        </tr>
+                                                            
+                                                            <%
                                                                 List<Documenti_Allievi> elencodocumentiallievo = a1.getDocumenti();
                                                                 elencodocumentiallievo = Utility.orderList(elencodocumentiallievo, "Documenti_Allievi");
                                                                 for (Documenti_Allievi lez : elencodocumentiallievo) {

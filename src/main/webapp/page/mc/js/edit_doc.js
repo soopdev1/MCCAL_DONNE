@@ -83,6 +83,8 @@ function sost_docprg(id, ext, mime, tipo) {
                 cambiaDoc(id, fdata, "sostituisciDocProgetto");
             } else if (tipo === 2) {
                 cambiaDoc(id, fdata, "sostituisciDocAllievo");
+            } else if (tipo === 3) {
+                cambiaDoc(id, fdata, "sostituisciDocIdAllievo");
             }
         } else {
             swal.close();

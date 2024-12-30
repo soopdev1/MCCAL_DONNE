@@ -597,10 +597,17 @@ function swalTableStory(idprogetto) {
         showCloseButton: true,
         showCancelButton: false,
         showConfirmButton: false,
+
         onOpen: function () {
             $("#kt_table_story").DataTable({
-                dom: `<'row'<'col-sm-12'ftr>><'row'<'col-sm-12 col-md-2'i><'col-sm-12 col-md-10 dataTables_pager'lp>>`,
-                lengthMenu: [15, 25, 50],
+                dom: `<'row'<'col-sm-12'ftr>><'row'<'col-sm-12 col-md-2'i><'col-sm-12 col-md-10 dataTables_pager'Blp>>`,
+                lengthMenu: [10, 20, 50],
+                buttons: [
+                    {
+                        extend: 'pdfHtml5',
+                        download: 'open'
+                    }
+                ],
                 language: {
                     "lengthMenu": "Mostra _MENU_",
                     "infoEmpty": "Mostrati 0 di 0 per 0",
@@ -611,7 +618,6 @@ function swalTableStory(idprogetto) {
                     "emptyTable": "Nessun risultato",
                     "sInfoFiltered": "(filtrato su _MAX_ risultati totali)"
                 },
-                scrollY: "40vh",
                 ajax: context + '/QueryMicro?type=getStoryPrg&idprogetto=' + idprogetto,
                 order: [],
                 columns: [
